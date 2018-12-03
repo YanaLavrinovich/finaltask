@@ -12,7 +12,7 @@
     <link href="./assets/css/signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
-<form class="form-signin" method="post" action="Authorization">
+<form class="form-signin" method="post">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputLogin" class="sr-only">Login</label>
     <input name="login" type="text" id="inputLogin" class="form-control" placeholder="Login" required="" autofocus="">
@@ -23,9 +23,8 @@
         <button name="signin" formaction="Authorization" class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
     </div>
     <div class="mb-3">
-
+        <input type="hidden" name="command" value="REGISTRATION">
         <button name="register" formaction="Registration" class="btn btn-lg btn-info btn-block" type="submit">Register!</button>
-
     </div>
 </form>
 <script src="./assets/js/bootstrap.min.js"/>

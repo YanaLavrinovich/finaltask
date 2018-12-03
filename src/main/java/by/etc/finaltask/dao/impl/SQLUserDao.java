@@ -14,21 +14,20 @@ import java.sql.SQLException;
 
 public class SQLUserDao implements UserDao {
 
-    private static final String URL = "jdbc:mysql://localhost/portal?serverTimezone=Europe/Moscow&useSSL=false";
+    private static final String URL = "jdbc:mysql://localhost/portal?useSSL=false";
     private static final String USER = "root";
     private static final String PASSWORD = "Super_mario_01";
     private Connection connection;
 
     public SQLUserDao() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("lol");
+        }
     }
 
     public String getPasswordAccordingLogin(String login) throws DaoException {
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//        } catch (ClassNotFoundException e) {
-//            throw new DaoException("Don't find class for Driver", e);
-//        }
-
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             final String SELECT_PASSWORD = "SELECT password FROM users WHERE login = ?";
@@ -41,20 +40,19 @@ public class SQLUserDao implements UserDao {
             if (resultSet.next()) {
                 passwordFromBase = resultSet.getString(1);
             }
-            connection.close();
             return passwordFromBase;
         } catch (SQLException e) {
             throw new DaoException("Exception with authorization", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void registration(User newUser) throws DaoException {
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//        } catch (ClassNotFoundException e) {
-//            throw new DaoException("Don't find class for Driver", e);
-//        }
-
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 
@@ -80,14 +78,18 @@ public class SQLUserDao implements UserDao {
 
                 userStatement.execute();
             }
-            connection.close();
         } catch (SQLException e) {
             throw new DaoException("Can't insert new user", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public User getUserInformation(String login) throws DaoException {
-
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             final String SELECT_INFO = "SELECT users.id, login, password, firstName, lastName, sex, roles.name FROM users" +
@@ -109,10 +111,15 @@ public class SQLUserDao implements UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(7).toUpperCase()));
 
             }
-            connection.close();
             return user;
         } catch (SQLException e) {
             throw new DaoException("Exception with finding user", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

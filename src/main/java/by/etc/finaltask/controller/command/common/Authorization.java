@@ -6,6 +6,7 @@ import by.etc.finaltask.logic.UserLogic;
 import by.etc.finaltask.logic.exception.UserLogicException;
 import by.etc.finaltask.logic.impl.UserLogicImpl;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,11 +29,10 @@ public class Authorization implements Command {
                 HttpSession session = request.getSession(true);
                 User user = userLogic.getUserInformation(login);
                 session.setAttribute(USER, user);
-                String nextURL = "/WEB-INF/registration.jsp";
-                response.sendRedirect(nextURL);
+                response.sendRedirect("homePage");
             }
         } catch (UserLogicException e) {
-            response.sendRedirect("/WEB-INF/home.jsp");
+            response.sendRedirect("homePage");
         }
     }
 }
