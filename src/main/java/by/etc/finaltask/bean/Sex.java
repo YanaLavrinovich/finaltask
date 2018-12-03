@@ -1,4 +1,4 @@
-package by.etc.bean;
+package by.etc.finaltask.bean;
 
 public enum Sex {
     WOMAN,

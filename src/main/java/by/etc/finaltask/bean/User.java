@@ -1,4 +1,4 @@
-package by.etc.bean;
+package by.etc.finaltask.bean;
 
 import java.io.Serializable;
 
@@ -59,7 +59,7 @@ public class User implements Serializable {
         return sex;
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(by.etc.finaltask.bean.Sex sex) {
         this.sex = sex;
     }
 
