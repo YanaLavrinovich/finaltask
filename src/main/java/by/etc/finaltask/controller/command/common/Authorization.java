@@ -32,7 +32,7 @@ public class Authorization implements Command {
                 response.sendRedirect("homePage");
             }
         } catch (UserLogicException e) {
-            response.sendRedirect("homePage");
+            response.sendRedirect("homePage"); //to index.jsp
         }
     }
 }

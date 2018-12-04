@@ -17,35 +17,35 @@
         <h4 class="h3 mb-3 font-weight-normal">Personal data</h4>
         <div class="mb-3">
             <label for="firstName">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+            <input type="text" name="firstName" class="form-control" id="firstName" placeholder="" value="" required="">
             <div class="invalid-feedback">
                 Valid first name is required.
             </div>
         </div>
         <div class="mb-3">
             <label for="lastName">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+            <input type="text" name="lastName" class="form-control" id="lastName" placeholder="" value="" required="">
             <div class="invalid-feedback">
                 Valid last name is required.
             </div>
         </div>
         <div class="mb-3">
             <label for="login">Login</label>
-            <input type="text" class="form-control" id="login" placeholder="">
+            <input type="text" name="login" class="form-control" id="login" placeholder="">
             <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
             </div>
         </div>
         <div class="mb-3">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="">
+            <input type="password" name="password" class="form-control" id="password" placeholder="">
             <div class="invalid-feedback">
                 Please enter a valid password.
             </div>
         </div>
         <div class="mb-3">
             <label for="sex">Sex</label>
-            <select class="custom-select d-block w-100" id="sex" required="">
+            <select name="sex" class="custom-select d-block w-100" id="sex" required="">
                 <option value="">Choose...</option>
                 <option>Man</option>
                 <option>Woman</option>
@@ -56,7 +56,7 @@
         </div>
         <div class="mb-3">
             <label for="role">Role</label>
-            <select class="custom-select d-block w-100" id="role" required="">
+            <select name="role" class="custom-select d-block w-100" id="role" required="">
                 <option value="">Choose...</option>
                 <option>Teacher</option>
                 <option>Student</option>
@@ -65,7 +65,8 @@
                 Please select a valid role.
             </div>
         </div>
-        <button name="register" class="btn btn-lg btn-info btn-block" type="submit">Register!</button>
+        <input type="hidden" name="command" value="REGISTRATION">
+        <button name="register" formaction="controller" class="btn btn-lg btn-info btn-block" type="submit">Register!</button>
     </div>
 </form>
 </body>

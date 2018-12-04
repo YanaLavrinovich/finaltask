@@ -8,4 +8,6 @@ public interface UserLogic {
     boolean isValidUser(String login, String password) throws UserLogicException;
 
     User getUserInformation(String login) throws UserLogicException;
+
+    void addNewUser(User user) throws UserLogicException;
 }

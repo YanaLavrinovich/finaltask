@@ -54,8 +54,6 @@ public class SQLUserDao implements UserDao {
 
     public void registration(User newUser) throws DaoException {
         try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             final String INSERT_USER = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
             final String SELECT_ROLE_ID = "SELECT id FROM roles WHERE name = ?";
@@ -79,7 +77,8 @@ public class SQLUserDao implements UserDao {
                 userStatement.execute();
             }
         } catch (SQLException e) {
-            throw new DaoException("Can't insert new user", e);
+            final String message = "Can't insert new user";
+            throw new DaoException(message, e);
         } finally {
             try {
                 connection.close();

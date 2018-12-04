@@ -15,16 +15,15 @@
 <form class="form-signin" method="post">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputLogin" class="sr-only">Login</label>
-    <input name="login" type="text" id="inputLogin" class="form-control" placeholder="Login" required="" autofocus="">
+    <input name="login" type="text" id="inputLogin" class="form-control" placeholder="Login" autofocus="">
     <label for="inputPassword" class="sr-only">Password</label>
-    <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+    <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password">
     <div class="mb-3">
         <input type="hidden" name="command" value="AUTHORIZATION">
-        <button name="signin" formaction="Authorization" class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
+        <button name="signin" formaction="controller" class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
     </div>
     <div class="mb-3">
-        <input type="hidden" name="command" value="REGISTRATION">
-        <button name="register" formaction="Registration" class="btn btn-lg btn-info btn-block" type="submit">Register!</button>
+        <button name="register" formaction="registration" class="btn btn-lg btn-info btn-block" type="submit">Register!</button>
     </div>
 </form>
 <script src="./assets/js/bootstrap.min.js"/>

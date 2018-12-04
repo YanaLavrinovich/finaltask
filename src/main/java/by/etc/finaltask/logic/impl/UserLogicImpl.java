@@ -24,8 +24,20 @@ public class UserLogicImpl implements UserLogic {
         try {
             user = userDao.getUserInformation(login);
         } catch (DaoException e) {
-            throw new UserLogicException("Can't get information about user", e);
+            final String message = "Can't get information about user.";
+            throw new UserLogicException(message, e);
         }
         return user;
+    }
+
+    @Override
+    public void addNewUser(User user) throws UserLogicException {
+        try {
+            userDao.registration(user);
+        } catch (DaoException e) {
+            final String message = "Can't add new user in base.";
+            //logger
+            throw new UserLogicException(message, e);
+        }
     }
 }

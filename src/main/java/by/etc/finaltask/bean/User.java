@@ -3,7 +3,7 @@ package by.etc.finaltask.bean;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4958483859493859385L;
 
     private int id;
     private String login;
