@@ -30,4 +30,9 @@
         <servlet-name>register</servlet-name>
         <url-pattern>/registration</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>by.etc.finaltask.listener.InitializationListener</listener-class>
+    </listener>
 </web-app>
+

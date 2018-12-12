@@ -30,6 +30,8 @@ public class Authorization implements Command {
                 User user = userLogic.getUserInformation(login);
                 session.setAttribute(USER, user);
                 response.sendRedirect("homePage");
+            } else {
+                //
             }
         } catch (UserLogicException e) {
             response.sendRedirect("homePage"); //to index.jsp
