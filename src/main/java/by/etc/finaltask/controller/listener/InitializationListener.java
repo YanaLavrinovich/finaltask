@@ -1,4 +1,4 @@
-package by.etc.finaltask.listener;
+package by.etc.finaltask.controller.listener;
 
 import by.etc.finaltask.dao.connector.ConnectionPool;
 import by.etc.finaltask.dao.connector.ConnectionPoolException;
@@ -14,7 +14,14 @@ public class InitializationListener implements ServletContextListener {
         try {
             connectionPool.initPoolData();
         } catch (ConnectionPoolException e) {
-            String message = "Failed to init connection pool";
+            //logger message = "Failed to init connection pool";
+            //TODO: go to error page
         }
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        connectionPool.dispose();
     }
 }

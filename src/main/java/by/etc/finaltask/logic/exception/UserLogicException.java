@@ -1,6 +1,8 @@
 package by.etc.finaltask.logic.exception;
 
 public class UserLogicException extends Exception {
+    private static final long serialVersionUID = 4398543950938430840L;
+
     public UserLogicException() {
     }
 

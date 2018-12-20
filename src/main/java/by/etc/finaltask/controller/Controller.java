@@ -2,10 +2,11 @@ package by.etc.finaltask.controller;
 
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
-import by.etc.finaltask.logic.UserLogic;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
@@ -13,8 +14,10 @@ public class Controller extends HttpServlet {
     private final CommandDirector commandDirector = CommandDirector.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String commandName = request.getParameter("command");
+        Command command = commandDirector.getCommand(commandName);
+        command.execute(request, response);
     }
 
     @Override

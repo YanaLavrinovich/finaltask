@@ -1,6 +1,8 @@
 package by.etc.finaltask.dao.connector;
 
-public class ConnectionPoolException extends Exception {
+public class ConnectionPoolException extends RuntimeException {
+    private static final long serialVersionUID = 5875783830957385646L;
+
     public ConnectionPoolException() {
     }
 

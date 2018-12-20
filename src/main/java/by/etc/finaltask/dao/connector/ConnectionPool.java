@@ -1,8 +1,6 @@
 package by.etc.finaltask.dao.connector;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -20,15 +18,22 @@ public class ConnectionPool {
     private static volatile ConnectionPool instance = new ConnectionPool();
 
     private static final int DEFAULT_POOL_SIZE = 5;
+    private static final String DRIVER = "database.driver";
+    private static final String URL = "database.url";
+    private static final String USER = "database.user";
+    private static final String PASSWORD = "database.password";
+    private static final String POOL_SIZE = "database.poolSize";
+    private static final String DATABASE = "database";
+
 
     private ConnectionPool() {
-        ResourceBundle bundle = ResourceBundle.getBundle("database");
-        this.driverName = bundle.getString("db.driver");
-        this.url = bundle.getString("db.url");
-        this.user = bundle.getString("db.user");
-        this.password = bundle.getString("db.password");
+        ResourceBundle bundle = ResourceBundle.getBundle(DATABASE);
+        this.driverName = bundle.getString(DRIVER);
+        this.url = bundle.getString(URL);
+        this.user = bundle.getString(USER);
+        this.password = bundle.getString(PASSWORD);
         try {
-            this.poolSize = Integer.valueOf(bundle.getString("db.poolSize"));
+            this.poolSize = Integer.valueOf(bundle.getString(POOL_SIZE));
         } catch (NumberFormatException e) {
             this.poolSize = DEFAULT_POOL_SIZE;
         }
@@ -45,13 +50,11 @@ public class ConnectionPool {
                 connectionQueue.add(connection);
             }
         } catch (SQLException e) {
-            final String message = "SQL Exception: cannot get connection";
             //logger.error(message, e);
-            throw new ConnectionPoolException(message, e);
+            throw new ConnectionPoolException("SQL Exception: cannot get connection", e);
         } catch (ClassNotFoundException e) {
-            final String message = "Can't find database driver class";
             //logger.error(message, e);
-            throw new ConnectionPoolException(message, e);
+            throw new ConnectionPoolException("Can't find database driver class", e);
         }
     }
 
@@ -61,12 +64,11 @@ public class ConnectionPool {
 
     private void clearConnectionQueue() throws ConnectionPoolException {
         try {
-            closeConnectionsQueue(givenAwayConQueue);
             closeConnectionsQueue(connectionQueue);
+            closeConnectionsQueue(givenAwayConQueue);
         } catch (SQLException e) {
-            final String message = "Closing connection error";
             //logger.error(message, e);
-            throw new ConnectionPoolException(message, e);
+            throw new ConnectionPoolException("Closing connection error", e);
         }
 
     }
@@ -81,24 +83,59 @@ public class ConnectionPool {
         }
     }
 
-    public Connection takeConnection() throws ConnectionPoolException {
-        Connection connection = null;
+    public Connection takeConnection() {
+        Connection connection;
         try {
             connection = connectionQueue.take();
             givenAwayConQueue.add(connection);
         } catch (InterruptedException e) {
-            final String message = "Error connecting to the data source.";
             //logger.error(message, e);
-            throw new ConnectionPoolException(message, e);
+            throw new ConnectionPoolException("Error connecting to the data source.", e);
         }
         return connection;
     }
 
+    public Connection takeManualCommitConnection() throws ConnectionException {
+        Connection connection = takeConnection();
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new ConnectionException("Can't set false commit.", e);
+        }
+        return connection;
+    }
+
+
+    public void closeConnection(Connection connection, Statement statement, ResultSet resultSet)
+            throws ConnectionPoolException {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        } catch (SQLException e) {
+            //closeConnection(connection);
+            //logger.error("Closing result set error", e);
+            throw new ConnectionPoolException("Closing result set error", e);
+        }
+        closeStatement(statement);
+        closeConnection(connection);
+    }
+
+    public void closeStatement(Statement statement) throws ConnectionPoolException {
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            //logger.error("Closing statement error", e);
+            throw new ConnectionPoolException("Closing statement error", e);
+        }
+    }
+
     public void closeConnection(Connection connection) throws ConnectionPoolException {
         if (!givenAwayConQueue.remove(connection)) {
-            final String message = "Error deleting connection from the given away connections pool";
-            //logger.error(message);
-            throw new ConnectionPoolException(message);
+           // logger.log(Level.ERROR, "Error deleting connection from the given away connections pool");
+            throw new ConnectionPoolException("Error deleting connection from the given away connections pool");
         }
         try {
             if (connection.isClosed()) {
@@ -109,14 +146,12 @@ public class ConnectionPool {
             }
 
         } catch (SQLException e) {
-            final String message = "Can't access connection";
-            //logger.error(message, e);
-            throw new ConnectionPoolException(message, e);
+           //logger.error("Can't access connection", e);
+            throw new ConnectionPoolException("Can't access connection", e);
         }
 
         if (!connectionQueue.offer(connection)) {
-            final String message = "Error allocating connection in the pool";
-            throw new ConnectionPoolException(message);
+            throw new ConnectionPoolException("Error allocating connection in the pool");
         }
     }
 
@@ -127,4 +162,5 @@ public class ConnectionPool {
     private Connection reopenConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
+
 }
