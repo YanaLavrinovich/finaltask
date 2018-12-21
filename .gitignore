@@ -1,2 +1,4 @@
-/.idea/*
+# Intellij
+.idea/
 *.iml
+*.iws
