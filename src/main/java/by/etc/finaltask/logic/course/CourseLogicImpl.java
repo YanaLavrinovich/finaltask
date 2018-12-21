@@ -1,7 +1,6 @@
 package by.etc.finaltask.logic.course;
 
 import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.builder.CourseBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.course.CourseDao;
@@ -9,7 +8,6 @@ import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.validator.CourseValidator;
-import by.etc.finaltask.logic.validator.UserValidator;
 import by.etc.finaltask.logic.validator.ValidatorFactory;
 
 import java.util.List;

@@ -31,6 +31,15 @@
         <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>creationCourse</servlet-name>
+        <jsp-file>/WEB-INF/jsp/teacher/courseCreation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>creationCourse</servlet-name>
+        <url-pattern>/creationCourse</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/server_error.jsp</location>

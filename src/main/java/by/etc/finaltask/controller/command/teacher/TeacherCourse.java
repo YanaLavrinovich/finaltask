@@ -7,15 +7,15 @@ import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
-import by.etc.finaltask.logic.exception.InvalidInputException;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class AllCourses implements Command {
+public class TeacherCourse implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -26,10 +26,9 @@ public class AllCourses implements Command {
         try {
             List<Course> courses = courseLogic.findCourseForTeacher(userId);
             request.setAttribute("courseList", courses);
-        } catch (CourseLogicException e) {
+            request.getRequestDispatcher(JspPagePath.HOME_PAGE).forward(request, response);
+        } catch (CourseLogicException | ServletException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        response.sendRedirect(JspPagePath.HOME_PAGE);
-
     }
 }

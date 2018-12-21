@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1484929385843094766L;
     private final CommandDirector commandDirector = CommandDirector.getInstance();
 
     @Override

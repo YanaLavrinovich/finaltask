@@ -1,6 +1,7 @@
 package by.etc.finaltask.controller.command.teacher;
 
 import by.etc.finaltask.controller.command.Command;
+import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
@@ -30,6 +31,8 @@ public class CreateCourse implements Command {
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
             courseLogic.addCourse(nameCourse, description, dateStart, dateFinish, userId);
+            Command command = CommandDirector.getInstance().getCommand("SHOW_HOME_PAGE");
+            command.execute(request, response);
         } catch (InvalidInputException e) {
             session.setAttribute("error", true);
             response.sendRedirect(request.getRequestURI());

@@ -5,5 +5,7 @@ public enum CommandType {
     REGISTRATION,
     CHANGE_LANGUAGE,
     LOGOUT,
-    ALL_COURSES;
+    CREATE_COURSE,
+    TEACHER_COURSE,
+    SHOW_HOME_PAGE
 }

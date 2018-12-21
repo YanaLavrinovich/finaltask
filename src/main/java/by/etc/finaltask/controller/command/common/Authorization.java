@@ -2,6 +2,7 @@ package by.etc.finaltask.controller.command.common;
 
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
+import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.exception.InvalidInputException;
@@ -28,8 +29,9 @@ public class Authorization implements Command {
             if (userLogic.isValidUser(email, password)) {
                 User user = userLogic.getUserInformation(email);
                 session.setAttribute(USER, user);
-
-                response.sendRedirect(JspPagePath.HOME_PAGE);
+                Command command = CommandDirector.getInstance().getCommand("SHOW_HOME_PAGE");
+                command.execute(request, response);
+                //request.getRequestDispatcher("contoller").forward(request,response);
             } else {
                 session.setAttribute("error", true);
                 response.sendRedirect(JspPagePath.AUTHORIZATION);
