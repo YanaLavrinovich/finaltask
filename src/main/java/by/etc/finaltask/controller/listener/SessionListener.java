@@ -6,11 +6,11 @@ import javax.servlet.http.HttpSessionListener;
 
 public class SessionListener implements HttpSessionListener {
     private static final String LANGUAGE = "language";
-    private static final String DEFAULT_LOCALE = "en";
+    private static final String DEFAULT_LANG = "en";
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         HttpSession session = se.getSession();
-        session.setAttribute(LANGUAGE, DEFAULT_LOCALE);
+        session.setAttribute(LANGUAGE, DEFAULT_LANG);
     }
 }

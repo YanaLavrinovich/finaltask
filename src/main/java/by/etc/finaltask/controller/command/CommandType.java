@@ -7,5 +7,7 @@ public enum CommandType {
     LOGOUT,
     CREATE_COURSE,
     TEACHER_COURSE,
-    SHOW_HOME_PAGE
+    SHOW_HOME_PAGE,
+    SHOW_REQUEST,
+    ADD_COUNT_REQUEST
 }

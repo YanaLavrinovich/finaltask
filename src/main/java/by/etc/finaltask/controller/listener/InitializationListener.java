@@ -14,7 +14,6 @@ public class InitializationListener implements ServletContextListener {
         try {
             connectionPool.initPoolData();
         } catch (ConnectionPoolException e) {
-            //logger message = "Failed to init connection pool";
             //TODO: go to error page
         }
     }

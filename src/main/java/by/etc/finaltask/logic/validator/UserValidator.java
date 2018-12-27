@@ -18,6 +18,9 @@ public class UserValidator {
 
     public boolean isValidUserInfo(User user) {
         boolean result = isValidEmail(user.getEmail());
+        result = isValidName(user.getFirstName());
+        result = isValidName(user.getLastName());
+        result = isValidRole(user.getRole().toString());
         return result;
     }
 

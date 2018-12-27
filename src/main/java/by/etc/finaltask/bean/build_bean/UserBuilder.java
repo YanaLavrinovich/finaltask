@@ -1,4 +1,4 @@
-package by.etc.finaltask.bean.builder;
+package by.etc.finaltask.bean.build_bean;
 
 import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.Sex;

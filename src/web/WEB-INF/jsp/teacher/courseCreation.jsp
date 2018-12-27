@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -35,7 +34,8 @@
                 <a class="nav-link" href="#"><c:out value="${courses}"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><c:out value="${requests}"/><span class="badge badge-pill badge-light">9</span></a>
+                <a class="nav-link" href="#"><c:out value="${requests}"/><span
+                        class="badge badge-pill badge-light">9</span></a>
             </li>
             <li class="nav-item">
                 <button type="button" class="btn btn-sm btn-light"><c:out value="${createCourseWithPlus}"/></button>
@@ -44,15 +44,20 @@
     </div>
     <div class="navbar-content text-right">
             <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userInfo" data-toggle="dropdown">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
+                <a class="nav-link dropdown-toggle" href="#" id="userInfo"
+                   data-toggle="dropdown">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
                 <div class="dropdown-menu" aria-labelledby="userInfo">
                 <a class="dropdown-item" href="#"><c:out value="${profile}"/></a>
                 <a class="dropdown-item" href="#"><c:out value="${logout}"/></a>
                 </div>
             </span>
         <span>
-                <a class="navbar-lang" href="controller?command=CHANGE_LANGUAGE&language=ru&page=${pageContext.request.requestURL}"><c:out value="${langRu}"/></a>
-                <a class="navbar-lang" href="controller?command=CHANGE_LANGUAGE&language=en&page=${pageContext.request.requestURL}"><c:out value="${langEn}"/></a>
+                <a class="navbar-lang"
+                   href="controller?command=CHANGE_LANGUAGE&language=ru&page=${pageContext.request.requestURL}"><c:out
+                        value="${langRu}"/></a>
+                <a class="navbar-lang"
+                   href="controller?command=CHANGE_LANGUAGE&language=en&page=${pageContext.request.requestURL}"><c:out
+                        value="${langEn}"/></a>
             </span>
     </div>
 </div>
@@ -75,15 +80,16 @@
         <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
                 <label for="fromDate"><c:out value="${dateStart}"/></label>
-                <input class="form-control" name="dateStart" id="fromDate" type="date" required />
+                <input class="form-control" name="dateStart" id="fromDate" type="date" required/>
             </div>
             <div class="col-md-6 col-sm-12 form-group">
                 <label for="toDate"><c:out value="${dateEnd}"/></label>
-                <input class="form-control" name="dateFinish" id="toDate" type="date" required />
+                <input class="form-control" name="dateFinish" id="toDate" type="date" required/>
             </div>
         </div>
         <div class="col-md-12 text-right">
-            <button type="submit" formaction="controller" class="btn btn-lg btn-info mb-2"><c:out value="${add}"/></button>
+            <button type="submit" formaction="controller" class="btn btn-lg btn-info mb-2"><c:out
+                    value="${add}"/></button>
             <input type="hidden" name="command" value="CREATE_COURSE">
             <input type="hidden" name="userId" value="${sessionScope.user.id}">
         </div>

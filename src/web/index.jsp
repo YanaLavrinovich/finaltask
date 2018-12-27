@@ -23,29 +23,32 @@
 <body class="text-center">
 <nav class="navbar navbar-expand navbar-accent">
     <div class="navbar-content text-right">
-        <a class="navbar-lang" href="controller?command=CHANGE_LANGUAGE&language=ru&page=${pageContext.request.requestURL}">${langRu}</a>
-        <a class="navbar-lang" href="controller?command=CHANGE_LANGUAGE&language=en&page=${pageContext.request.requestURL}">${langEn}</a>
+        <a class="navbar-lang"
+           href="controller?command=CHANGE_LANGUAGE&language=ru&page=${pageContext.request.requestURL}">${langRu}</a>
+        <a class="navbar-lang"
+           href="controller?command=CHANGE_LANGUAGE&language=en&page=${pageContext.request.requestURL}">${langEn}</a>
     </div>
 </nav>
 <div class="container text-center">
-<form class="form-signin" method="post">
-    <img class="mb-4" src="./assets/images/logo.png"/>
-    <h1 class="h3 mb-3 font-weight-normal">${messageSignIn}</h1>
-    <c:if test="${sessionScope.error==true}">
-        <p style="color: crimson">Wrong email or password!</p>
-    </c:if>
-    <label for="inputLogin" class="sr-only">${email}</label>
-    <input name="email" type="email" id="inputLogin" class="form-control" placeholder=${email}>
-    <label for="inputPassword" class="sr-only">${password}</label>
-    <input name="password" type="password" id="inputPassword" class="form-control" value="" placeholder=${password} >
-    <div class="mb-3">
-        <input type="hidden" name="command" value="AUTHORIZATION">
-        <button name="signin" formaction="controller" class="btn btn-lg btn-info btn-block" type="submit">${signIn}</button>
-    </div>
-    <div class="mb-3">
-        <p>${messageRegister} <a href="registration">${register}</a></p>
-    </div>
-</form>
+    <form class="form-signin" method="post">
+        <img class="mb-4" src="./assets/images/logo.png"/>
+        <h1 class="h3 mb-3 font-weight-normal">${messageSignIn}</h1>
+        <c:if test="${sessionScope.error==true}">
+            <p style="color: crimson">Wrong email or password!</p>
+        </c:if>
+        <label for="inputLogin" class="sr-only">${email}</label>
+        <input name="email" type="email" id="inputLogin" class="form-control" placeholder=${email}>
+        <label for="inputPassword" class="sr-only">${password}</label>
+        <input name="password" type="password" id="inputPassword" class="form-control" value="" placeholder=${password}>
+        <div class="mb-3">
+            <input type="hidden" name="command" value="AUTHORIZATION">
+            <button name="signin" formaction="controller" class="btn btn-lg btn-info btn-block"
+                    type="submit">${signIn}</button>
+        </div>
+        <div class="mb-3">
+            <p>${messageRegister} <a href="registration">${register}</a></p>
+        </div>
+    </form>
 </div>
 <script src="./assets/js/jquery-3.3.1.slim.min.js"></script>
 <script src="./assets/js/bootstrap.min.js"></script>

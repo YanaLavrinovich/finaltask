@@ -12,20 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-public class TeacherCourse implements Command {
+public class AddCountRequest implements Command {
     private static final String USER = "user";
-    private static final String COURSE_LIST = "courseList";
+    private static final String COUNT_REQUEST = "countRequest";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         int userId = user.getId();
+
+        CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
-            List<Course> courses = courseLogic.findCourseForTeacher(userId);
-            request.setAttribute(COURSE_LIST, courses);
+            Map<Course, List<User>> requests = courseLogic.findRequest(userId);
+            int count = 0;
+            for (Map.Entry<Course, List<User>> entry : requests.entrySet()) {
+                List<User> users = entry.getValue();
+                count += users.size();
+            }
+            request.setAttribute(COUNT_REQUEST, count);
         } catch (CourseLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

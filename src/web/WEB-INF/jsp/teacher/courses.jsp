@@ -9,7 +9,7 @@
 <body>
 
 <div class="container">
-    <jsp:include page="/WEB-INF/jsp/component/teacherCourses.jsp" flush="true"/>
+    <jsp:include page="/WEB-INF/jsp/teacher/teacherCourses.jsp" flush="true"/>
 </div>
 
 <script src="./assets/js/jquery-3.3.1.slim.min.js"></script>

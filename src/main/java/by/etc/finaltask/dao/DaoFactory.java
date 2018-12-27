@@ -6,7 +6,7 @@ import by.etc.finaltask.dao.user.SQLUserDao;
 import by.etc.finaltask.dao.user.UserDao;
 
 public class DaoFactory {
-    private final static DaoFactory instance = new DaoFactory();
+    private static final DaoFactory instance = new DaoFactory();
 
     private UserDao userDao = new SQLUserDao();
     private CourseDao courseDao = new SQLCourseDao();

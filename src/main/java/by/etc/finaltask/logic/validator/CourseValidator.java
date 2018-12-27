@@ -1,7 +1,7 @@
 package by.etc.finaltask.logic.validator;
 
 public class CourseValidator {
-    private static final String NAME_REGEX = "^[\\w\\s]+$";
+    private static final String NAME_REGEX = "^[\\w\\s']+$";
     private static final String DATE_REGEX = "^[1-9][\\d]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
     private static final String USER_ID_REGEX = "^\\d+$";
 

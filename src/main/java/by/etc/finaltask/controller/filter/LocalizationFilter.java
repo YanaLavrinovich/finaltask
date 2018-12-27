@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class LocalizationFilter implements Filter {
     private static final String LANGUAGE = "language";
+    private static final String DEFAULT_LANG = "en";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -16,11 +17,11 @@ public class LocalizationFilter implements Filter {
 
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute(LANGUAGE);
-        if(lang == null) {
-            lang = "en";
-            session.setAttribute(LANGUAGE,lang);
+        if (lang == null) {
+            lang = DEFAULT_LANG;
+            session.setAttribute(LANGUAGE, lang);
         }
-        session.setAttribute(LANGUAGE,lang);
-        filterChain.doFilter(request,response);
+        session.setAttribute(LANGUAGE, lang);
+        filterChain.doFilter(request, response);
     }
 }

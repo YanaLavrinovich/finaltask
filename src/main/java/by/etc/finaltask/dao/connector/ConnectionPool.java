@@ -1,5 +1,6 @@
 package by.etc.finaltask.dao.connector;
 
+
 import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -134,7 +135,7 @@ public class ConnectionPool {
 
     public void closeConnection(Connection connection) throws ConnectionPoolException {
         if (!givenAwayConQueue.remove(connection)) {
-           // logger.log(Level.ERROR, "Error deleting connection from the given away connections pool");
+            // logger.log(Level.ERROR, "Error deleting connection from the given away connections pool");
             throw new ConnectionPoolException("Error deleting connection from the given away connections pool");
         }
         try {
@@ -146,7 +147,7 @@ public class ConnectionPool {
             }
 
         } catch (SQLException e) {
-           //logger.error("Can't access connection", e);
+            //logger.error("Can't access connection", e);
             throw new ConnectionPoolException("Can't access connection", e);
         }
 

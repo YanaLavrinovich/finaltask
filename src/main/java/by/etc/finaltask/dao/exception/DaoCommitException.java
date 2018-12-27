@@ -1,6 +1,8 @@
 package by.etc.finaltask.dao.exception;
 
 public class DaoCommitException extends Exception {
+    private static final long serialVersionUID = 4395034594395340559L;
+
     public DaoCommitException() {
     }
 

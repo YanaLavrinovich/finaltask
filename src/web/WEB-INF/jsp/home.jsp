@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -25,17 +24,22 @@
     <div class="navbar navbar-expand navbar-accent text-center">
         <img class="navbar-logo" src="./assets/images/small-logo.png"/>
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">${courses}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">${requests}<span class="badge badge-pill badge-light">9</span></a>
-                </li>
-                <li class="nav-item">
-                    <button type="button" value="go" onclick="location.href='creationCourse'" class="btn btn-sm btn-light">${createCourseWithPlus}</button>
-                </li>
-            </ul>
+            <c:if test="${sessionScope.user.role eq 'TEACHER'}">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">${courses}</a>
+                    </li>
+                    <li class="nav-item">
+                        <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
+                        <a class="nav-link" href="controller?command=SHOW_REQUEST">${requests} <span
+                                class="badge badge-pill badge-light">${countRequest.toString()}</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" value="go" onclick="location.href='creationCourse'"
+                                class="btn btn-sm btn-light">${createCourseWithPlus}</button>
+                    </li>
+                </ul>
+            </c:if>
         </div>
         <div class="navbar-content text-right">
             <span class="nav-item dropdown">

@@ -3,10 +3,10 @@ package by.etc.finaltask.controller.command.common;
 import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.Sex;
 import by.etc.finaltask.bean.User;
+import by.etc.finaltask.bean.build_bean.UserBuilder;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
-import by.etc.finaltask.bean.builder.UserBuilder;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.exception.UserLogicException;
 import by.etc.finaltask.logic.user.UserLogic;
@@ -16,10 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static by.etc.finaltask.controller.command.ParameterType.*;
 
 public class Registration implements Command {
-  //  private static final Logger logger = LogManager.getLogger(Registration.class);
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String SEX = "sex";
+    private static final String ROLE = "role";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,7 +42,6 @@ public class Registration implements Command {
         try {
             userLogic.addNewUser(user, password);
         } catch (UserLogicException e) {
-            //logger.error("Can't add new user", user);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (InvalidInputException e) {
             session.setAttribute("error", true);

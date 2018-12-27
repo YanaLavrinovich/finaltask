@@ -1,7 +1,8 @@
 package by.etc.finaltask.logic.course;
 
 import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.builder.CourseBuilder;
+import by.etc.finaltask.bean.User;
+import by.etc.finaltask.bean.build_bean.CourseBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.course.CourseDao;
 import by.etc.finaltask.dao.exception.DaoException;
@@ -11,6 +12,7 @@ import by.etc.finaltask.logic.validator.CourseValidator;
 import by.etc.finaltask.logic.validator.ValidatorFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class CourseLogicImpl implements CourseLogic{
     @Override
@@ -27,7 +29,7 @@ public class CourseLogicImpl implements CourseLogic{
                 throw new CourseLogicException("Can't add new course.", e);
             }
         } else {
-            throw new InvalidInputException("Wrong params in user or password");
+            throw new InvalidInputException("Wrong params in input date");
         }
     }
 
@@ -41,5 +43,17 @@ public class CourseLogicImpl implements CourseLogic{
             throw new CourseLogicException("Can't get courses.");
         }
         return courses;
+    }
+
+    @Override
+    public Map<Course, List<User>> findRequest(int userId) throws CourseLogicException {
+        Map<Course, List<User>> requests;
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            requests = courseDao.findRequest(userId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't get requests.", e);
+        }
+        return requests;
     }
 }

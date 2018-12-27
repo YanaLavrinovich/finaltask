@@ -4,8 +4,8 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+    <link href="../../../assets/css/signin.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -34,9 +34,9 @@
         </div>
     </div>
     <c:if test="${courseLoopCout.count % 3 == 0}">
-    </div>
-    <div class="row">
-        </c:if>
-        </c:forEach>
+</div>
+<div class="row">
+    </c:if>
+    </c:forEach>
 </body>
 </html>

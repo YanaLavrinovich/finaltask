@@ -11,6 +11,7 @@ public class ChangeLanguage implements Command {
     private static final String LANGUAGE = "language";
     private static final String PREV_COMMAND = "prev_command";
     private static final String PAGE = "page";
+    private static final String URI_START = "controller?command=";
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
@@ -18,9 +19,9 @@ public class ChangeLanguage implements Command {
         session.setAttribute(LANGUAGE, lang);
         String prev_command = request.getParameter(PREV_COMMAND);
         String page = request.getParameter(PAGE);
-        if(prev_command != null) {
-            response.sendRedirect("controller?command=" + prev_command);
-        } else if(page != null) {
+        if (prev_command != null) {
+            response.sendRedirect(URI_START + prev_command);
+        } else if (page != null) {
             response.sendRedirect(page);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

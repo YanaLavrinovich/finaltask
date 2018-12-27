@@ -14,9 +14,9 @@
     </servlet-mapping>
 
     <servlet>
-    <servlet-name>home</servlet-name>
-    <jsp-file>/WEB-INF/jsp/home.jsp</jsp-file>
-</servlet>
+        <servlet-name>home</servlet-name>
+        <jsp-file>/WEB-INF/jsp/home.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>home</servlet-name>
         <url-pattern>/homePage</url-pattern>
@@ -38,6 +38,15 @@
     <servlet-mapping>
         <servlet-name>creationCourse</servlet-name>
         <url-pattern>/creationCourse</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>requests</servlet-name>
+        <jsp-file>/WEB-INF/jsp/teacher/requests.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>requests</servlet-name>
+        <url-pattern>/requests</url-pattern>
     </servlet-mapping>
 
     <error-page>

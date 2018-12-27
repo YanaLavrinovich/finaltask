@@ -72,4 +72,40 @@ public class Course implements Serializable {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 17;
+        result = prime * result + id;
+        result = prime * result + name.hashCode();
+        result = prime * result + description.hashCode();
+        result = prime * result + dateStart.hashCode();
+        result = prime * result + dateFinish.hashCode();
+        result = prime * result + userId;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+        if(obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Course course = (Course) obj;
+        return course.getId() == id &&
+                course.getName() != null && course.getName().equals(name) &&
+                course.getDescription() != null && course.getDescription().equals(description) &&
+                course.getDateStart() != null && course.getDateStart().equals(dateStart) &&
+                course.getDateFinish() != null && course.getDateFinish().equals(dateFinish) &&
+                course.getUserId() != 0 && course.getUserId() == userId;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Entity %s [id %d, name %s, description %s, start date %s, date finish %s, userId %d]",
+                getClass().getSimpleName(), id, name, description, dateStart, dateFinish, userId);
+    }
 }
