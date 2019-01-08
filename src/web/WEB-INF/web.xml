@@ -49,6 +49,15 @@
         <url-pattern>/requests</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>coursePage</servlet-name>
+        <jsp-file>/WEB-INF/jsp/teacher/course.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>coursePage</servlet-name>
+        <url-pattern>/coursePage</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/server_error.jsp</location>

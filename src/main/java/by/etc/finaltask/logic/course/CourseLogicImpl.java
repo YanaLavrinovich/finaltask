@@ -6,6 +6,7 @@ import by.etc.finaltask.bean.build_bean.CourseBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.course.CourseDao;
 import by.etc.finaltask.dao.exception.DaoException;
+import by.etc.finaltask.dao.exception.DaoRollbackException;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.validator.CourseValidator;
@@ -14,12 +15,12 @@ import by.etc.finaltask.logic.validator.ValidatorFactory;
 import java.util.List;
 import java.util.Map;
 
-public class CourseLogicImpl implements CourseLogic{
+public class CourseLogicImpl implements CourseLogic {
     @Override
     public void addCourse(String name, String description, String dateStart, String dateFinish, int userId) throws InvalidInputException, CourseLogicException {
         CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
-        if(courseValidator.isValidCourse(name, dateStart, dateFinish, userId)) {
+        if (courseValidator.isValidCourse(name, dateStart, dateFinish, userId)) {
             CourseBuilder courseBuilder = new CourseBuilder();
             Course course = courseBuilder.build(name, description, dateStart, dateFinish, userId);
             CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
@@ -55,5 +56,59 @@ public class CourseLogicImpl implements CourseLogic{
             throw new CourseLogicException("Can't get requests.", e);
         }
         return requests;
+    }
+
+    @Override
+    public void rejectSubscriber(int studentId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.rejectSubscriber(studentId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't reject subscriber.", e);
+        }
+    }
+
+    @Override
+    public void acceptSubscriber(int studentId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.acceptSubscriber(studentId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't accept subscriber.", e);
+        }
+    }
+
+    @Override
+    public Course takeCourse(int courseId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        Course course = null;
+        try {
+            course = courseDao.takeCourse(courseId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't take course.", e);
+        }
+        return course;
+    }
+
+    @Override
+    public List<User> takeStudent(int courseId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        List<User> students = null;
+        try {
+            students = courseDao.takeStudent(courseId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't take student list.", e);
+        }
+        return students;
+    }
+
+    @Override
+    public void removeCourse(int courseId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.removeCourse(courseId);
+        } catch (DaoException | DaoRollbackException e) {
+            throw new CourseLogicException("Can't remove course.", e);
+        }
     }
 }

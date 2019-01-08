@@ -13,7 +13,15 @@ public class UserBuilder {
         newUser.setLastName(lastName);
         newUser.setSex(sex);
         newUser.setRole(role);
+        return newUser;
+    }
 
+    public User build(int id, String email, String firstName, String lastName){
+        User newUser = new User();
+        newUser.setId(id);
+        newUser.setEmail(email);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
         return newUser;
     }
 }

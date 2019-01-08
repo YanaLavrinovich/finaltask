@@ -1,10 +1,7 @@
 package by.etc.finaltask.controller.command;
 
 import by.etc.finaltask.controller.command.common.*;
-import by.etc.finaltask.controller.command.teacher.AddCountRequest;
-import by.etc.finaltask.controller.command.teacher.CreateCourse;
-import by.etc.finaltask.controller.command.teacher.ShowRequest;
-import by.etc.finaltask.controller.command.teacher.TeacherCourse;
+import by.etc.finaltask.controller.command.teacher.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +20,11 @@ public class CommandDirector {
         commands.put(CommandType.SHOW_HOME_PAGE, new ShowHomePage());
         commands.put(CommandType.SHOW_REQUEST, new ShowRequest());
         commands.put(CommandType.ADD_COUNT_REQUEST, new AddCountRequest());
+        commands.put(CommandType.REJECT_SUBSCRIBER, new RejectSubscriber());
+        commands.put(CommandType.ACCEPT_SUBSCRIBER, new AcceptSubscriber());
+        commands.put(CommandType.COURSE_CREATION_PAGE, new ShowCreateCoursePage());
+        commands.put(CommandType.SHOW_COURSE, new ShowCourse());
+        commands.put(CommandType.REMOVE_COURSE, new RemoveCourse());
     }
 
     public Command getCommand(String name) {

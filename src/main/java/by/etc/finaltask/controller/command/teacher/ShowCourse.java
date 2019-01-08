@@ -13,28 +13,26 @@ import by.etc.finaltask.logic.exception.CourseLogicException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-public class ShowRequest implements Command {
-    private static final String USER = "user";
-    private static final String REQUEST_MAP = "requestMap";
+public class ShowCourse implements Command {
+    private static final String COURSE_ID = "courseId";
+    private static final String COURSE = "course";
+    private static final String STUDENT_LIST = "studentList";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(USER);
-        int userId = user.getId();
         CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
 
+        int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
-            Map<Course, List<User>> requests = courseLogic.findRequest(userId);
-            request.setAttribute(REQUEST_MAP, requests);
-
-            request.getRequestDispatcher(JspPagePath.REQUEST_PAGE).forward(request, response);
+            Course course = courseLogic.takeCourse(courseId);
+            List<User> students = courseLogic.takeStudent(courseId);
+            request.setAttribute(COURSE, course);
+            request.setAttribute(STUDENT_LIST, students);
+            request.getRequestDispatcher(JspPagePath.COURSE_PAGE).forward(request, response);
         } catch (ServletException | CourseLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

@@ -26,41 +26,12 @@
 
 </head>
 <body>
-<div class="navbar navbar-expand navbar-accent text-center">
-    <img class="navbar-logo" src="./assets/images/small-logo.png"/>
-    <div class="collapse navbar-collapse" id="navbarsExample02">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#"><c:out value="${courses}"/></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><c:out value="${requests}"/><span
-                        class="badge badge-pill badge-light">9</span></a>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="btn btn-sm btn-light"><c:out value="${createCourseWithPlus}"/></button>
-            </li>
-        </ul>
-    </div>
-    <div class="navbar-content text-right">
-            <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userInfo"
-                   data-toggle="dropdown">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
-                <div class="dropdown-menu" aria-labelledby="userInfo">
-                <a class="dropdown-item" href="#"><c:out value="${profile}"/></a>
-                <a class="dropdown-item" href="#"><c:out value="${logout}"/></a>
-                </div>
-            </span>
-        <span>
-                <a class="navbar-lang"
-                   href="controller?command=CHANGE_LANGUAGE&language=ru&page=${pageContext.request.requestURL}"><c:out
-                        value="${langRu}"/></a>
-                <a class="navbar-lang"
-                   href="controller?command=CHANGE_LANGUAGE&language=en&page=${pageContext.request.requestURL}"><c:out
-                        value="${langEn}"/></a>
-            </span>
-    </div>
-</div>
+
+<jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
+<jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
+    <jsp:param name="countRequest" value="${countRequest.toString()}"/>
+    <jsp:param name="prev_command" value="COURSE_CREATION_PAGE"/>
+</jsp:include>
 
 <div class="container">
     <div class="row">

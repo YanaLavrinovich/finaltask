@@ -14,4 +14,14 @@ public interface CourseLogic {
     List<Course> findCourseForTeacher(int userId) throws CourseLogicException;
 
     Map<Course, List<User>> findRequest(int userId) throws CourseLogicException;
+
+    void rejectSubscriber(int studentId) throws CourseLogicException;
+
+    void acceptSubscriber(int studentId) throws CourseLogicException;
+
+    Course takeCourse(int courseId) throws CourseLogicException;
+
+    List<User> takeStudent(int courseId) throws CourseLogicException;
+
+    void removeCourse(int courseId) throws CourseLogicException;
 }

@@ -4,16 +4,18 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-    <link href="../../../assets/css/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link href="./assets/css/signin.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
 
     <fmt:message bundle="${loc}" key="locale.message.courses" var="courses"/>
+    <fmt:message bundle="${loc}" key="locale.button.see.course" var="seeCourse"/>
 
 </head>
 <body>
+<div class="container">
 <div class="row">
     <div class="col-md-12 align-left">
         <h1>${courses}</h1>
@@ -27,9 +29,11 @@
             <div class="card-body">
                 <h5 class="card-title"><c:out value="${course.name}"/></h5>
                 <h6 class="card-subtitle mb-2 text-muted"><c:out value="${courseLoopCout.count}"/></h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a href="#" class="card-link">Card link</a>
+                <p class="card-text"><c:out value="${course.description}"/></p>
+                <form action="controller" method="post">
+                    <a href="controller?command=SHOW_COURSE&courseId=${course.id}" class="card-link"><c:out
+                            value="${seeCourse}"/></a>
+                </form>
             </div>
         </div>
     </div>
@@ -38,5 +42,9 @@
 <div class="row">
     </c:if>
     </c:forEach>
+</div>
+</div>
+    <script src="./assets/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
 </body>
 </html>
