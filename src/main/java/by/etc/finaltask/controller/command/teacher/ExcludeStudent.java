@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AcceptSubscriber implements Command {
+public class ExcludeStudent implements Command {
     private static final String STUDENT_ID = "studentId";
     private static final String COURSE_ID = "courseId";
 
@@ -19,13 +19,14 @@ public class AcceptSubscriber implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int studentId = Integer.valueOf(request.getParameter(STUDENT_ID));
         int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
+
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
-            courseLogic.acceptSubscriber(courseId, studentId);
-            Command requestCommand = CommandDirector.getInstance().getCommand(CommandType.SHOW_REQUEST.toString());
+            courseLogic.excludeStudent(courseId, studentId);
+            Command requestCommand = CommandDirector.getInstance().getCommand(CommandType.SHOW_COURSE.toString());
             requestCommand.execute(request, response);
         } catch (CourseLogicException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

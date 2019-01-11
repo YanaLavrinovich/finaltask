@@ -14,6 +14,8 @@
     <fmt:message bundle="${loc}" key="locale.button.exclude" var="exclude"/>
     <fmt:message bundle="${loc}" key="locale.button.edit" var="edit"/>
     <fmt:message bundle="${loc}" key="locale.button.remove" var="remove"/>
+    <fmt:message bundle="${loc}" key="locale.message.course.date.start" var="dateStart"/>
+    <fmt:message bundle="${loc}" key="locale.message.course.date.finish" var="dateFinish"/>
 
 </head>
 <body>
@@ -22,7 +24,7 @@
 <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
 <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
     <jsp:param name="countRequest" value="${countRequest.toString()}"/>
-    <jsp:param name="prev_command" value="SHOW_COURSE&courseId=${course.id}"/>
+    <jsp:param name="prev_command" value="SHOW_COURSE,courseId=${course.id}"/>
 </jsp:include>
 
 <div class="container">
@@ -32,11 +34,15 @@
         </div>
         <div class="col-md-2 text-right">
             <div class="btn-group">
-                <button class="btn btn-sm btn-info"><c:out value="${edit}"/></button>
+                <form action="controller" method="post">
+                    <input type="hidden" name="command" value="SHOW_EDIT_COURSE_PAGE">
+                    <input type="hidden" name="courseId" value="${course.id}">
+                    <button class="btn btn-sm btn-info"><c:out value="${edit}"/></button>
+                </form>
                 <form action="controller" method="post">
                     <input type="hidden" name="command" value="REMOVE_COURSE">
                     <input type="hidden" name="courseId" value="${course.id}">
-                <button class="btn btn-sm btn-danger"><c:out value="${remove}"/></button>
+                    <button class="btn btn-sm btn-danger"><c:out value="${remove}"/></button>
                 </form>
             </div>
         </div>
@@ -44,7 +50,17 @@
 
     <div class="row">
         <div class="col-md-12 align-left">
-            <p><c:out value="${course.description}"/></p>
+            <h5><c:out value="${course.description}"/></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 align-left">
+            <h5><c:out value="${dateStart} ${course.dateStart}"/></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 align-left">
+            <h5><c:out value="${dateFinish} ${course.dateFinish}"/></h5>
         </div>
     </div>
     <div class="row">
@@ -58,11 +74,22 @@
                 <c:forEach items="${studentList}" var="student" varStatus="studentLoopCout">
                     <tr>
                         <th scope="row"><c:out value="${studentLoopCout.count}"/></th>
-                        <td><c:out value="${student.firstName} ${student.lastName}"/></td>
+                        <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${student.id}'">
+                            <c:out value="${student.firstName} ${student.lastName}"/></td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-info"><c:out value="${setMark}"/></button>
-                                <button class="btn btn-sm btn-danger"><c:out value="${exclude}"/></button>
+                                <form method="post" action="controller">
+                                    <input type="hidden" name="command" value="SHOW_MARK_PAGE">
+                                    <input type="hidden" name="studentId" value="${student.id}">
+                                    <input type="hidden" name="courseId" value="${course.id}">
+                                    <button class="btn btn-sm btn-info"><c:out value="${setMark}"/></button>
+                                </form>
+                                <form method="post" action="controller">
+                                    <input type="hidden" name="command" value="EXCLUDE_STUDENT">
+                                    <input type="hidden" name="studentId" value="${student.id}">
+                                    <input type="hidden" name="courseId" value="${course.id}">
+                                    <button class="btn btn-sm btn-danger"><c:out value="${exclude}"/></button>
+                                </form>
                             </div>
                         </td>
                     </tr>

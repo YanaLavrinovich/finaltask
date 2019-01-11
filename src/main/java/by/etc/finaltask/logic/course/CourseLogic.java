@@ -15,13 +15,20 @@ public interface CourseLogic {
 
     Map<Course, List<User>> findRequest(int userId) throws CourseLogicException;
 
-    void rejectSubscriber(int studentId) throws CourseLogicException;
+    void rejectSubscriber(int courseId, int studentId) throws CourseLogicException;
 
-    void acceptSubscriber(int studentId) throws CourseLogicException;
+    void acceptSubscriber(int courseId, int studentId) throws CourseLogicException;
 
     Course takeCourse(int courseId) throws CourseLogicException;
 
     List<User> takeStudent(int courseId) throws CourseLogicException;
 
     void removeCourse(int courseId) throws CourseLogicException;
+
+    void excludeStudent(int courseId, int studentId) throws CourseLogicException;
+
+    void setMark(int courseId, int studentId, int mark, String comment) throws CourseLogicException;
+
+    void editCourse(int courseId, String nameCourse, String description, String dateStart, String dateFinish) throws CourseLogicException;
+
 }

@@ -12,6 +12,7 @@ import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.validator.CourseValidator;
 import by.etc.finaltask.logic.validator.ValidatorFactory;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -59,20 +60,20 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public void rejectSubscriber(int studentId) throws CourseLogicException {
+    public void rejectSubscriber(int courseId, int studentId) throws CourseLogicException {
         CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
         try {
-            courseDao.rejectSubscriber(studentId);
+            courseDao.rejectSubscriber(courseId, studentId);
         } catch (DaoException e) {
             throw new CourseLogicException("Can't reject subscriber.", e);
         }
     }
 
     @Override
-    public void acceptSubscriber(int studentId) throws CourseLogicException {
+    public void acceptSubscriber(int courseId, int studentId) throws CourseLogicException {
         CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
         try {
-            courseDao.acceptSubscriber(studentId);
+            courseDao.acceptSubscriber(courseId, studentId);
         } catch (DaoException e) {
             throw new CourseLogicException("Can't accept subscriber.", e);
         }
@@ -110,5 +111,38 @@ public class CourseLogicImpl implements CourseLogic {
         } catch (DaoException | DaoRollbackException e) {
             throw new CourseLogicException("Can't remove course.", e);
         }
+    }
+
+    @Override
+    public void excludeStudent(int courseId, int studentId) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.excludeStudent(courseId, studentId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't exclude student.", e);
+        }
+    }
+
+    @Override
+    public void setMark(int courseId, int studentId, int mark, String comment) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.setMark(courseId, studentId, mark, comment);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't set mark for student.", e);
+        }
+    }
+
+    @Override
+    public void editCourse(int courseId, String nameCourse, String description, String dateStart, String dateFinish) throws CourseLogicException {
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        Date start = Date.valueOf(dateStart);
+        Date finish = Date.valueOf(dateFinish);
+        try {
+            courseDao.editCourse(courseId, nameCourse, description, start, finish);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't edit course", e);
+        }
+
     }
 }

@@ -11,4 +11,6 @@ public interface UserLogic {
     User getUserInformation(String email) throws UserLogicException, InvalidInputException;
 
     void addNewUser(User user, String password) throws UserLogicException, InvalidInputException;
+
+    User takeUser(int userId) throws UserLogicException;
 }

@@ -59,4 +59,16 @@ public class UserLogicImpl implements UserLogic {
             throw new InvalidInputException("Wrong params in user or password");
         }
     }
+
+    @Override
+    public User takeUser(int userId) throws UserLogicException {
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        User user = null;
+        try {
+            user = userDao.takeUser(userId);
+        } catch (DaoException e) {
+            throw new UserLogicException("Can't take user.", e);
+        }
+        return user;
+    }
 }

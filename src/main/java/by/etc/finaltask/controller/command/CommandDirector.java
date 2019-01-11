@@ -25,6 +25,12 @@ public class CommandDirector {
         commands.put(CommandType.COURSE_CREATION_PAGE, new ShowCreateCoursePage());
         commands.put(CommandType.SHOW_COURSE, new ShowCourse());
         commands.put(CommandType.REMOVE_COURSE, new RemoveCourse());
+        commands.put(CommandType.EXCLUDE_STUDENT, new ExcludeStudent());
+        commands.put(CommandType.SHOW_MARK_PAGE, new ShowMarkPage());
+        commands.put(CommandType.SET_MARK, new SetMark());
+        commands.put(CommandType.SHOW_PROFILE, new ShowProfile());
+        commands.put(CommandType.SHOW_EDIT_COURSE_PAGE, new ShowEditCoursePage());
+        commands.put(CommandType.EDIT_COURSE, new EditCourse());
     }
 
     public Command getCommand(String name) {

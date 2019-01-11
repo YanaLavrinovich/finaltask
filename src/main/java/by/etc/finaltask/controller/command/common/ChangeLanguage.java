@@ -1,7 +1,9 @@
 package by.etc.finaltask.controller.command.common;
 
 import by.etc.finaltask.controller.command.Command;
+import by.etc.finaltask.controller.command.JspPagePath;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,14 +19,19 @@ public class ChangeLanguage implements Command {
         HttpSession session = request.getSession();
         String lang = request.getParameter(LANGUAGE);
         session.setAttribute(LANGUAGE, lang);
-        String prev_command = request.getParameter(PREV_COMMAND);
+        String prevCommand = request.getParameter(PREV_COMMAND);
         String page = request.getParameter(PAGE);
-        if (prev_command != null) {
-            response.sendRedirect(URI_START + prev_command);
+        if (prevCommand != null) {
+            prevCommand = convert(prevCommand);
+            response.sendRedirect(URI_START + prevCommand);
         } else if (page != null) {
             response.sendRedirect(page);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private String convert(String prevCommand) {
+        return prevCommand.replace(',','&');
     }
 }

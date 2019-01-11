@@ -4,8 +4,11 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+    <link href="../../../assets/css/signin.css" rel="stylesheet">
+
+    <fmt:setLocale value="${sessionScope.language}"/>
+    <fmt:setBundle basename="locale.locale" var="loc"/>
 
 </head>
 <body>

@@ -3,6 +3,7 @@ package by.etc.finaltask.dao.user;
 import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.Sex;
 import by.etc.finaltask.bean.User;
+import by.etc.finaltask.bean.build_bean.UserBuilder;
 import by.etc.finaltask.dao.connector.ConnectionException;
 import by.etc.finaltask.dao.connector.ConnectionPool;
 import by.etc.finaltask.dao.connector.ConnectionPoolException;
@@ -17,11 +18,13 @@ import java.sql.SQLException;
 public class SQLUserDao implements UserDao {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String SELECT_PASSWORD = "SELECT count(id) FROM users WHERE email = ? AND password = ?";
+    private static final String CHECK_PASSWORD = "SELECT count(id) FROM users WHERE email = ? AND password = ?";
     private static final String INSERT_USER = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ROLE_ID = "SELECT id FROM roles WHERE name = ?";
     private static final String SELECT_INFO = "SELECT users.id, email, firstName, lastName, sex, roles.name FROM users" +
             " JOIN roles ON users.roles_id = roles.id WHERE email = ?";
+    private static final String TAKE_USER_BY_ID = "SELECT email, firstName, lastName, sex, roles.name FROM users" +
+                       " JOIN roles ON users.roles_id = roles.id WHERE users.id = ?";
 
     public boolean isValidPassword(String login, String password) throws DaoException {
         Connection connection = null;
@@ -32,7 +35,7 @@ public class SQLUserDao implements UserDao {
         try {
             connection = connectionPool.takeConnection();
 
-            statement = connection.prepareStatement(SELECT_PASSWORD);
+            statement = connection.prepareStatement(CHECK_PASSWORD);
             statement.setString(1, login);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
@@ -111,7 +114,6 @@ public class SQLUserDao implements UserDao {
                 user.setLastName(resultSet.getString(4));
                 user.setSex(Sex.valueOf(resultSet.getString(5).toUpperCase()));
                 user.setRole(Role.valueOf(resultSet.getString(6).toUpperCase()));
-
             }
             return user;
         } catch (SQLException e) {
@@ -121,5 +123,34 @@ public class SQLUserDao implements UserDao {
         } finally {
             connectionPool.closeConnection(connection, statement, resultSet);
         }
+    }
+
+    @Override
+    public User takeUser(int userId) throws DaoException {
+        User user = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            UserBuilder userBuilder = new UserBuilder();
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(TAKE_USER_BY_ID);
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String email = resultSet.getString(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(3);
+                Sex sex = Sex.valueOf(resultSet.getString(4).toUpperCase());
+                Role role = Role.valueOf(resultSet.getString(5).toUpperCase());
+                user = userBuilder.build(email, firstName, lastName,sex,role);
+                user.setId(userId);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't take user.", e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+        return user;
     }
 }

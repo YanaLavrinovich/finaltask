@@ -13,13 +13,15 @@ import java.io.IOException;
 
 public class RejectSubscriber implements Command {
     private static final String STUDENT_ID = "studentId";
+    private static final String COURSE_ID = "courseId";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int studentId = Integer.valueOf(request.getParameter(STUDENT_ID));
+        int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
-            courseLogic.rejectSubscriber(studentId);
+            courseLogic.rejectSubscriber(courseId, studentId);
             Command requestCommand = CommandDirector.getInstance().getCommand(CommandType.SHOW_REQUEST.toString());
             requestCommand.execute(request, response);
         } catch (CourseLogicException e) {

@@ -55,7 +55,8 @@
                                 </button>
                             </h5>
                         </div>
-                        <div id="collapse${requestEntry.key.id}" class="collapse" area-labelledby="heading${requestEntry.key.id}">
+                        <div id="collapse${requestEntry.key.id}" class="collapse"
+                             area-labelledby="heading${requestEntry.key.id}">
                             <div class="card-body">
                                 <table class="table table-hover">
                                     <tbody>
@@ -71,6 +72,8 @@
                                                         <input type="hidden" name="command" value="ACCEPT_SUBSCRIBER">
                                                         <input type="hidden" name="studentId"
                                                                value="${requestEntity.id}">
+                                                        <input type="hidden" name="courseId"
+                                                               value="${requestEntry.key.id}">
                                                         <button class="btn btn-sm btn-info"><c:out
                                                                 value="${accept}"/></button>
                                                     </form>
@@ -78,6 +81,8 @@
                                                         <input type="hidden" name="command" value="REJECT_SUBSCRIBER">
                                                         <input type="hidden" name="studentId"
                                                                value="${requestEntity.id}">
+                                                        <input type="hidden" name="courseId"
+                                                               value="${requestEntry.key.id}">
                                                         <button class="btn btn-sm btn-danger">
                                                             <c:out value="${reject}"/></button>
                                                     </form>

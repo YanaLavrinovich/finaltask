@@ -43,7 +43,8 @@
                 <a class="nav-link dropdown-toggle" href="#" id="userInfo"
                    data-toggle="dropdown">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
                 <div class="dropdown-menu" aria-labelledby="userInfo">
-                <a class="dropdown-item" href="#">${profile}</a>
+                <a class="dropdown-item"
+                   href="controller?command=SHOW_PROFILE&userId=${sessionScope.user.id}">${profile}</a>
                 <a class="dropdown-item" href="controller?command=LOGOUT">${logout}</a>
                 </div>
             </span>

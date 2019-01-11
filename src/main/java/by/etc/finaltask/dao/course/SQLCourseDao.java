@@ -10,10 +10,7 @@ import by.etc.finaltask.dao.connector.ConnectionPool;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +29,11 @@ public class SQLCourseDao implements CourseDao {
     private static final String REJECT_SUBSCRIBER = "UPDATE training " +
             "SET course_status_id = " +
             "(SELECT id FROM course_status WHERE course_status.name = 'reject') " +
-            "WHERE users_id = ?";
+            "WHERE courses_id = ? AND users_id = ?";
     private static final String ACCEPT_SUBSCRIBER = "UPDATE training " +
             "SET course_status_id = " +
             "(SELECT id FROM course_status WHERE course_status.name = 'approve') " +
-            "WHERE users_id = ?";
+            "WHERE courses_id = ? AND users_id = ?";
     private static final String TAKE_COURSE_BY_ID = "SELECT id, name, description, dateStart, dateFinish, users_id FROM courses" +
             " WHERE id = ?";
     private static final String TAKE_STUDENTS_BY_COURSE_ID = "SELECT users.id, email, firstName, lastname FROM training" +
@@ -48,6 +45,13 @@ public class SQLCourseDao implements CourseDao {
     private static final String REJECT_STUDENTS_OF_COURSE = "UPDATE training SET" +
             " course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'reject')" +
             " WHERE courses_id = ?";
+    private static final String EXCLUDE_STUDENT = "UPDATE training SET course_status_id =" +
+            " (SELECT id FROM course_status WHERE course_status.name = 'exclude')" +
+            " WHERE courses_id = ? AND users_id = ?";
+    private static final String SET_MARK = "UPDATE training SET mark = ?, comment = ?" +
+            " WHERE courses_id = ? AND users_id = ?";
+    private static final String EDIT_COURSE = "UPDATE courses SET name = ?, description = ?, dateStart = ?, dateFinish = ?" +
+            " WHERE id = ?";
 
     @Override
     public void addCourse(Course course) throws DaoException {
@@ -139,13 +143,14 @@ public class SQLCourseDao implements CourseDao {
     }
 
     @Override
-    public void rejectSubscriber(int studentId) throws DaoException {
+    public void rejectSubscriber(int courseId, int studentId) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(REJECT_SUBSCRIBER);
-            statement.setInt(1, studentId);
+            statement.setInt(1, courseId);
+            statement.setInt(2, studentId);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException("Can't reject subscriber.", e);
@@ -156,13 +161,14 @@ public class SQLCourseDao implements CourseDao {
     }
 
     @Override
-    public void acceptSubscriber(int studentId) throws DaoException {
+    public void acceptSubscriber(int courseId, int studentId) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(ACCEPT_SUBSCRIBER);
-            statement.setInt(1, studentId);
+            statement.setInt(1, courseId);
+            statement.setInt(2, studentId);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException("Can't accept subscriber.", e);
@@ -252,6 +258,66 @@ public class SQLCourseDao implements CourseDao {
             throw new DaoException("Can't remove course.", e);
         } catch (ConnectionException e) {
             throw new DaoException("Can't get connection.", e);
+        } finally {
+            connectionPool.closeStatement(courseStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void excludeStudent(int courseId, int studentId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement studentStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            studentStatement = connection.prepareStatement(EXCLUDE_STUDENT);
+            studentStatement.setInt(1, courseId);
+            studentStatement.setInt(2, studentId);
+            studentStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't exclude student. Something is wrong with database", e);
+        } finally {
+            connectionPool.closeStatement(studentStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void setMark(int courseId, int studentId, int mark, String comment) throws DaoException {
+        Connection connection = null;
+        PreparedStatement markStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            markStatement = connection.prepareStatement(SET_MARK);
+            markStatement.setInt(1, mark);
+            markStatement.setString(2, comment);
+            markStatement.setInt(3, courseId);
+            markStatement.setInt(4, studentId);
+            markStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't set mark for student. Something is wrong with database", e);
+        } finally {
+            connectionPool.closeStatement(markStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void editCourse(int courseId, String nameCourse, String description, Date dateStart, Date dateFinish) throws DaoException {
+        Connection connection = null;
+        PreparedStatement courseStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            courseStatement = connection.prepareStatement(EDIT_COURSE);
+            courseStatement.setString(1, nameCourse);
+            courseStatement.setString(2, description);
+            courseStatement.setDate(3, dateStart);
+            courseStatement.setDate(4, dateFinish);
+            courseStatement.setInt(5, courseId);
+
+            courseStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't edit course.", e);
         } finally {
             connectionPool.closeStatement(courseStatement);
             connectionPool.closeConnection(connection);

@@ -5,6 +5,7 @@ import by.etc.finaltask.bean.User;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,20 @@ public interface CourseDao {
 
     Map<Course, List<User>> findRequest(int userId) throws DaoException;
 
-    void rejectSubscriber(int studentId) throws DaoException;
+    void rejectSubscriber(int courseId, int studentId) throws DaoException;
 
-    void acceptSubscriber(int studentId) throws DaoException;
+    void acceptSubscriber(int courseId, int studentId) throws DaoException;
 
     Course takeCourse(int courseId) throws DaoException;
 
     List<User> takeStudent(int courseId) throws DaoException;
 
     void removeCourse(int courseId) throws DaoException, DaoRollbackException;
+
+    void excludeStudent(int courseId, int studentId) throws DaoException;
+
+    void setMark(int courseId, int studentId, int mark, String comment) throws DaoException;
+
+    void editCourse(int courseId, String nameCourse, String description, Date dateStart, Date dateFinish) throws DaoException;
+
 }
