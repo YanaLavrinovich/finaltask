@@ -15,6 +15,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF8");
         String commandName = request.getParameter("command");
         Command command = commandDirector.getCommand(commandName);
         command.execute(request, response);
@@ -22,6 +23,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF8");
         String commandName = request.getParameter("command");
         Command command = commandDirector.getCommand(commandName);
         command.execute(request, response);

@@ -10,7 +10,10 @@ public interface UserLogic {
 
     User getUserInformation(String email) throws UserLogicException, InvalidInputException;
 
-    void addNewUser(User user, String password) throws UserLogicException, InvalidInputException;
+    void addNewUser(String email, String firstName, String lastName, String sex, String role, String password) throws UserLogicException, InvalidInputException;
 
-    User takeUser(int userId) throws UserLogicException;
+    User takeUser(String userId) throws UserLogicException, InvalidInputException;
+
+    void remove(String userId, String role) throws InvalidInputException, UserLogicException;
+
 }

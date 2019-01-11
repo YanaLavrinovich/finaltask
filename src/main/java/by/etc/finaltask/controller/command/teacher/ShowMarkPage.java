@@ -9,6 +9,7 @@ import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
+import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.exception.UserLogicException;
 import by.etc.finaltask.logic.user.UserLogic;
 
@@ -25,8 +26,8 @@ public class ShowMarkPage implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int studentId = Integer.valueOf(request.getParameter(STUDENT_ID));
-        int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
+        String studentId = request.getParameter(STUDENT_ID);
+        String courseId = request.getParameter(COURSE_ID);
 
         CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
@@ -37,7 +38,7 @@ public class ShowMarkPage implements Command {
             request.setAttribute(COURSE, course);
             request.setAttribute(STUDENT, student);
             request.getRequestDispatcher(JspPagePath.MARK_PAGE).forward(request, response);
-        } catch (ServletException | CourseLogicException | UserLogicException e) {
+        } catch (ServletException | CourseLogicException | UserLogicException | InvalidInputException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

@@ -4,8 +4,8 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-    <link href="../../../assets/css/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link href="./assets/css/signin.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -18,53 +18,48 @@
 
 </head>
 <body>
+<jsp:useBean id="user" scope="request" type="by.etc.finaltask.bean.User"/>
 <c:if test="${sessionScope.user.role eq 'TEACHER'}">
     <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
     <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
         <jsp:param name="countRequest" value="${countRequest.toString()}"/>
-        <jsp:param name="prev_command" value="SHOW_PROFILE"/>
+        <jsp:param name="prev_command" value="SHOW_PROFILE,userId=${user.id}"/>
     </jsp:include>
 </c:if>
-<jsp:useBean id="user" scope="request" type="by.etc.finaltask.bean.User"/>
+<c:if test="${sessionScope.user.role eq 'STUDENT'}">
+    <jsp:include page="/WEB-INF/jsp/component/studentNavBar.jsp">
+        <jsp:param name="prev_command" value="SHOW_PROFILE,userId=${user.id}"/>
+    </jsp:include>
+</c:if>
+
 <div class="container">
     <div class="row">
-        <div class="col-md-10 align-left">
-            <h1><c:out value="${user.firstName} ${user.lastName}"/></h1>
+        <div class="col-md-12">
+            <h1>My Profile</h1>
         </div>
-        <c:if test="${sessionScope.user.id eq user.id}">
-            <div class="col-md-2 text-right">
-                <div class="btn-group">
-                    <form action="controller" method="post">
-                        <input type="hidden" name="command" value="EDIT_PROFILE">
-                        <input type="hidden" name="courseId" value="${user.id}">
-                        <button class="btn btn-sm btn-info"><c:out value="${edit}"/></button>
-                    </form>
-                    <form action="controller" method="post">
-                        <input type="hidden" name="command" value="REMOVE_PROFILE">
-                        <input type="hidden" name="courseId" value="${user.id}">
-                        <button class="btn btn-sm btn-danger"><c:out value="${remove}"/></button>
-                    </form>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><c:out value="${user.firstName} ${user.lastName}"/></h5>
                 </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b><c:out value="${email}"/>: </b><c:out value="${user.email}"/></li>
+                    <li class="list-group-item"><b><c:out value="${sex}"/>: </b><c:out value="${user.sex}"/></li>
+                    <li class="list-group-item"><b><c:out value="${role}"/>: </b><c:out value="${user.role}"/></li>
+                </ul>
+                <c:if test="${sessionScope.user.id eq user.id}">
+                    <div class="card-body">
+                        <a href="controller?command=EDIT_PROFILE" class="card-link"><c:out value="${edit}"/></a>
+                        <a href="controller?command=REMOVE_USER" class="card-link"><c:out value="${remove}"/></a>
+                    </div>
+                </c:if>
             </div>
-        </c:if>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 align-left">
-            <h5><c:out value="${email} = ${user.email}"/></h5>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 align-left">
-            <h5><c:out value="${sex} = ${user.sex}"/></h5>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 align-left">
-            <h5><c:out value="${role} = ${user.role}"/></h5>
         </div>
     </div>
 </div>
+
 
 <script src="./assets/js/jquery-3.3.1.slim.min.js"></script>
 <script src="./assets/js/bootstrap.min.js"></script>

@@ -64,7 +64,7 @@
                                                varStatus="requestLoop">
                                         <tr>
                                             <th scope="row"><c:out value="${requestLoop.count}"/></th>
-                                            <td><c:out
+                                            <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${requestEntity.id}'"><c:out
                                                     value="${requestEntity.firstName} ${requestEntity.lastName}"/></td>
                                             <td class="text-right">
                                                 <div class="btn-group">

@@ -18,6 +18,7 @@ import java.util.List;
 public class ShowHomePage implements Command {
     private static final String USER = "user";
     private static final String TEACHER_ROLE = "TEACHER";
+    private static final String STUDENT_ROLE = "STUDENT";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -29,6 +30,9 @@ public class ShowHomePage implements Command {
         if (role.toString().equals(TEACHER_ROLE)) {
             commands.add(CommandDirector.getInstance().getCommand(CommandType.TEACHER_COURSE.toString()));
             commands.add(CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()));
+        }
+        if (role.toString().equals(STUDENT_ROLE)) {
+            commands.add(CommandDirector.getInstance().getCommand(CommandType.ACTUAL_COURSES.toString()));
         }
         for (Command command : commands) {
             command.execute(request, response);

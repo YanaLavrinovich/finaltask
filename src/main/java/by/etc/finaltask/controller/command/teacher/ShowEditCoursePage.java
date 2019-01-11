@@ -8,6 +8,7 @@ import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
+import by.etc.finaltask.logic.exception.InvalidInputException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,14 +23,14 @@ public class ShowEditCoursePage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
 
-        int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
+        String courseId = request.getParameter(COURSE_ID);
 
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
             Course course = courseLogic.takeCourse(courseId);
             request.setAttribute(COURSE, course);
             request.getRequestDispatcher(JspPagePath.EDIT_COURSE_PAGE).forward(request,response);
-        } catch (CourseLogicException | ServletException e) {
+        } catch (CourseLogicException | ServletException | InvalidInputException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

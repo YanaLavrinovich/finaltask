@@ -4,8 +4,8 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-    <link href="../../../assets/css/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link href="./assets/css/signin.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -19,9 +19,14 @@
         <jsp:param name="countRequest" value="${countRequest.toString()}"/>
         <jsp:param name="prev_command" value="SHOW_HOME_PAGE"/>
     </jsp:include>
-
-    <jsp:include page="/WEB-INF/jsp/teacher/teacherCourses.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/component/tabWithCourses.jsp"/>
 </c:if>
 
+<c:if test="${sessionScope.user.role eq 'STUDENT'}">
+    <jsp:include page="/WEB-INF/jsp/component/studentNavBar.jsp">
+        <jsp:param name="prev_command" value="SHOW_HOME_PAGE"/>
+    </jsp:include>
+    <jsp:include page="/WEB-INF/jsp/component/tabWithCourses.jsp"/>
+</c:if>
 </body>
 </html>

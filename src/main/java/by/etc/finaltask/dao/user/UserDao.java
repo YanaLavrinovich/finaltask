@@ -12,4 +12,8 @@ public interface UserDao {
     User getUserInfo(String login) throws DaoException;
 
     User takeUser(int userId) throws DaoException;
+
+    void removeStudent(int userId) throws DaoRollbackException, DaoException;
+
+    void removeTeacher(int userId) throws DaoRollbackException, DaoException;
 }

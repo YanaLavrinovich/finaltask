@@ -10,4 +10,5 @@ public class JspPagePath {
     public static final String MARK_PAGE = "markPage";
     public static final String PROFILE_PAGE = "profilePage";
     public static final String EDIT_COURSE_PAGE = "editCoursePage";
+    public static final String MY_COURSES_PAGE = "myCoursesPage";
 }

@@ -13,8 +13,7 @@
     <fmt:message bundle="${loc}" key="locale.language.english.short" var="langEn"/>
     <fmt:message bundle="${loc}" key="locale.language.russian.short" var="langRu"/>
     <fmt:message bundle="${loc}" key="locale.message.courses" var="courses"/>
-    <fmt:message bundle="${loc}" key="locale.message.requests" var="requests"/>
-    <fmt:message bundle="${loc}" key="locale.button.create.course.with.plus" var="createCourseWithPlus"/>
+    <fmt:message bundle="${loc}" key="locale.message.my.courses" var="myCourses"/>
     <fmt:message bundle="${loc}" key="locale.button.profile" var="profile"/>
     <fmt:message bundle="${loc}" key="locale.button.log.out" var="logout"/>
 
@@ -29,12 +28,7 @@
                    href="controller?command=SHOW_HOME_PAGE">${courses}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="controller?command=SHOW_REQUEST">${requests} <span
-                        class="badge badge-pill badge-light">${param.countRequest}</span></a>
-            </li>
-            <li class="nav-item">
-                <button type="button" value="go" onclick="location.href='controller?command=COURSE_CREATION_PAGE'"
-                        class="btn btn-sm btn-light">${createCourseWithPlus}</button>
+                <a class="nav-link" href="controller?command=SHOW_MY_COURSES_PAGE">${myCourses}</a>
             </li>
         </ul>
     </div>

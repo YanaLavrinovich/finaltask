@@ -6,6 +6,7 @@ import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
+import by.etc.finaltask.logic.exception.InvalidInputException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public class AddCountRequest implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        int userId = user.getId();
+        String userId = String.valueOf(user.getId());
 
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
@@ -33,7 +34,7 @@ public class AddCountRequest implements Command {
                 count += users.size();
             }
             request.setAttribute(COUNT_REQUEST, count);
-        } catch (CourseLogicException e) {
+        } catch (CourseLogicException | InvalidInputException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

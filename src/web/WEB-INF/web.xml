@@ -51,7 +51,7 @@
 
     <servlet>
         <servlet-name>coursePage</servlet-name>
-        <jsp-file>/WEB-INF/jsp/teacher/course.jsp</jsp-file>
+        <jsp-file>/WEB-INF/jsp/common/course.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>coursePage</servlet-name>
@@ -83,6 +83,15 @@
     <servlet-mapping>
         <servlet-name>editCoursePage</servlet-name>
         <url-pattern>/editCoursePage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>myCoursesPage</servlet-name>
+        <jsp-file>/WEB-INF/jsp/student/myCoursesPage.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>myCoursesPage</servlet-name>
+        <url-pattern>/myCoursesPage</url-pattern>
     </servlet-mapping>
 
     <error-page>

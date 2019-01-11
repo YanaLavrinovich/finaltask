@@ -6,6 +6,7 @@ import by.etc.finaltask.controller.command.CommandType;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
+import by.etc.finaltask.logic.exception.InvalidInputException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,15 +18,15 @@ public class ExcludeStudent implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int studentId = Integer.valueOf(request.getParameter(STUDENT_ID));
-        int courseId = Integer.valueOf(request.getParameter(COURSE_ID));
+        String studentId = request.getParameter(STUDENT_ID);
+        String courseId = request.getParameter(COURSE_ID);
 
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         try {
             courseLogic.excludeStudent(courseId, studentId);
             Command requestCommand = CommandDirector.getInstance().getCommand(CommandType.SHOW_COURSE.toString());
             requestCommand.execute(request, response);
-        } catch (CourseLogicException e) {
+        } catch (CourseLogicException | InvalidInputException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,6 +1,7 @@
 package by.etc.finaltask.dao.course;
 
 import by.etc.finaltask.bean.Course;
+import by.etc.finaltask.bean.Training;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
@@ -30,6 +31,11 @@ public interface CourseDao {
 
     void setMark(int courseId, int studentId, int mark, String comment) throws DaoException;
 
-    void editCourse(int courseId, String nameCourse, String description, Date dateStart, Date dateFinish) throws DaoException;
+    void editCourse(int courseId, String nameCourse, String description, String dateStart, String dateFinish) throws DaoException;
 
+    List<Course> findActualCourse() throws DaoException;
+
+    void submitCourse(int userId, int courseId) throws DaoException;
+
+    List<Training> takeTraining(int userId) throws DaoException;
 }

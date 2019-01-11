@@ -27,7 +27,7 @@ public class CreateCourse implements Command {
         String description = request.getParameter(DESCRIPTION);
         String dateStart = request.getParameter(DATE_START);
         String dateFinish = request.getParameter(DATE_FINISH);
-        int userId = Integer.valueOf(request.getParameter(USER_ID));
+        String userId = request.getParameter(USER_ID);
 
         HttpSession session = request.getSession(true);
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();

@@ -1,6 +1,9 @@
 package by.etc.finaltask.controller.command;
 
 import by.etc.finaltask.controller.command.common.*;
+import by.etc.finaltask.controller.command.student.ActualCourses;
+import by.etc.finaltask.controller.command.student.ShowMyCoursesPage;
+import by.etc.finaltask.controller.command.student.SubmitCourse;
 import by.etc.finaltask.controller.command.teacher.*;
 
 import java.util.HashMap;
@@ -31,6 +34,10 @@ public class CommandDirector {
         commands.put(CommandType.SHOW_PROFILE, new ShowProfile());
         commands.put(CommandType.SHOW_EDIT_COURSE_PAGE, new ShowEditCoursePage());
         commands.put(CommandType.EDIT_COURSE, new EditCourse());
+        commands.put(CommandType.ACTUAL_COURSES, new ActualCourses());
+        commands.put(CommandType.REMOVE_USER, new RemoveUser());
+        commands.put(CommandType.SUBMIT_COURSE, new SubmitCourse());
+        commands.put(CommandType.SHOW_MY_COURSES_PAGE, new ShowMyCoursesPage());
     }
 
     public Command getCommand(String name) {

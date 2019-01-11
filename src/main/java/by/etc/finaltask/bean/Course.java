@@ -1,7 +1,6 @@
 package by.etc.finaltask.bean;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 public class Course implements Serializable {
     private static final long serialVersionUID = 4857546578432834325L;
@@ -9,14 +8,14 @@ public class Course implements Serializable {
     private int id;
     private String name;
     private String description;
-    private Date dateStart;
-    private Date dateFinish;
+    private String dateStart;
+    private String dateFinish;
     private int userId;
 
     public Course() {
     }
 
-    public Course(int id, String name, String description, Date dateStart, Date dateFinish, int userId) {
+    public Course(int id, String name, String description, String dateStart, String dateFinish, int userId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,19 +48,19 @@ public class Course implements Serializable {
         this.description = description;
     }
 
-    public Date getDateStart() {
+    public String getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(String dateStart) {
         this.dateStart = dateStart;
     }
 
-    public Date getDateFinish() {
+    public String getDateFinish() {
         return dateFinish;
     }
 
-    public void setDateFinish(Date dateFinish) {
+    public void setDateFinish(String dateFinish) {
         this.dateFinish = dateFinish;
     }
 

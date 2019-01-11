@@ -16,10 +16,9 @@ public class CourseBuilder {
         Course course = new Course();
         course.setName(name);
         course.setDescription(description);
-        Date dateStartSQL = Date.valueOf(dateStart);
-        Date dateFinishSQL = Date.valueOf(dateFinish);
-        course.setDateStart(dateStartSQL);
-        course.setDateFinish(dateFinishSQL);
+        course.setDateStart(dateStart);
+        course.setDateFinish(dateFinish);
+
         course.setUserId(userId);
         return course;
     }

@@ -27,20 +27,19 @@ public class Registration implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String login = request.getParameter(EMAIL);
+        String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
         String firstName = request.getParameter(FIRST_NAME);
         String lastName = request.getParameter(LAST_NAME);
-        Sex sex = Sex.valueOf(request.getParameter(SEX).toUpperCase());
-        Role role = Role.valueOf(request.getParameter(ROLE).toUpperCase());
+        String sex = request.getParameter(SEX);
+        String role = request.getParameter(ROLE);
 
         UserLogic userLogic = LogicFactory.getInstance().getUserLogic();
-        UserBuilder builder = new UserBuilder();
 
         HttpSession session = request.getSession(true);
-        User user = builder.build(login, firstName, lastName, sex, role);
+
         try {
-            userLogic.addNewUser(user, password);
+            userLogic.addNewUser(email, firstName, lastName, sex, role, password);
         } catch (UserLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (InvalidInputException e) {
