@@ -25,10 +25,18 @@
 <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="course" scope="request" type="by.etc.finaltask.bean.Course"/>
 
-<jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
-    <jsp:param name="countRequest" value="${countRequest.toString()}"/>
-    <jsp:param name="prev_command" value="SHOW_EDIT_COURSE_PAGE,courseId=${course.id}"/>
-</jsp:include>
+<c:if test="${sessionScope.user.role eq 'TEACHER'}">
+    <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
+        <jsp:param name="countRequest" value="${countRequest.toString()}"/>
+        <jsp:param name="prev_command" value="SHOW_EDIT_COURSE_PAGE,courseId=${course.id}"/>
+    </jsp:include>
+</c:if>
+<c:if test="${sessionScope.user.role eq 'ADMIN'}">
+    <jsp:include page="/WEB-INF/jsp/component/adminNavBar.jsp">
+        <jsp:param name="prev_command" value="SHOW_EDIT_COURSE_PAGE,courseId=${course.id}"/>
+    </jsp:include>
+</c:if>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12 align-left">

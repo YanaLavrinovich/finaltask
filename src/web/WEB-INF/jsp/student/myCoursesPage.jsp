@@ -46,7 +46,7 @@
                         <c:if test="${training.courseStatus eq 'requested'}">
                             <td><span class="badge badge-warning"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'excluded' or 'leave'}">
+                        <c:if test="${training.courseStatus eq 'excluded' or training.courseStatus eq 'leave' or training.courseStatus eq 'reject'}">
                             <td><span class="badge badge-danger"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
                         <td><c:out value="${training.dateStart} - ${training.dateFinish}"/></td>

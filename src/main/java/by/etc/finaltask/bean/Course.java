@@ -11,17 +11,21 @@ public class Course implements Serializable {
     private String dateStart;
     private String dateFinish;
     private int userId;
+    private String isDeleted;
+
+    private String progress;
 
     public Course() {
     }
 
-    public Course(int id, String name, String description, String dateStart, String dateFinish, int userId) {
+    public Course(int id, String name, String description, String dateStart, String dateFinish, int userId, String progress) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.dateStart = dateStart;
         this.dateFinish = dateFinish;
         this.userId = userId;
+        this.progress = progress;
     }
 
     public int getId() {
@@ -70,6 +74,22 @@ public class Course implements Serializable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     @Override

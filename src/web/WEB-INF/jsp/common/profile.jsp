@@ -15,6 +15,7 @@
     <fmt:message bundle="${loc}" key="locale.message.enter.email" var="email"/>
     <fmt:message bundle="${loc}" key="locale.message.sex" var="sex"/>
     <fmt:message bundle="${loc}" key="locale.message.role" var="role"/>
+    <fmt:message bundle="${loc}" key="locale.button.profile" var="profile"/>
 
 </head>
 <body>
@@ -31,11 +32,16 @@
         <jsp:param name="prev_command" value="SHOW_PROFILE,userId=${user.id}"/>
     </jsp:include>
 </c:if>
+<c:if test="${sessionScope.user.role eq 'ADMIN'}">
+    <jsp:include page="/WEB-INF/jsp/component/adminNavBar.jsp">
+        <jsp:param name="prev_command" value="SHOW_PROFILE,userId=${user.id}"/>
+    </jsp:include>
+</c:if>
 
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>My Profile</h1>
+            <h1><c:out value="${profile}"/></h1>
         </div>
     </div>
     <div class="row">
@@ -51,8 +57,11 @@
                 </ul>
                 <c:if test="${sessionScope.user.id eq user.id}">
                     <div class="card-body">
-                        <a href="controller?command=EDIT_PROFILE" class="card-link"><c:out value="${edit}"/></a>
-                        <a href="controller?command=REMOVE_USER" class="card-link"><c:out value="${remove}"/></a>
+                        <a href="controller?command=SHOW_EDIT_PROFILE_PAGE&userId=${user.id}" class="card-link"><c:out
+                                value="${edit}"/></a>
+                        <c:if test="${sessionScope.user.role ne 'ADMIN'}">
+                            <a href="controller?command=REMOVE_USER" class="card-link"><c:out value="${remove}"/></a>
+                        </c:if>
                     </div>
                 </c:if>
             </div>

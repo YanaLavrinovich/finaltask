@@ -28,5 +28,15 @@
     </jsp:include>
     <jsp:include page="/WEB-INF/jsp/component/tabWithCourses.jsp"/>
 </c:if>
+
+<c:if test="${sessionScope.user.role eq 'ADMIN'}">
+    <jsp:include page="/WEB-INF/jsp/component/adminNavBar.jsp">
+        <jsp:param name="prev_command" value="SHOW_HOME_PAGE"/>
+    </jsp:include>
+    <jsp:include page="/WEB-INF/jsp/component/adminTabWithCourses.jsp"/>
+</c:if>
+
+<script src="./assets/js/jquery-3.3.1.slim.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
 </body>
 </html>

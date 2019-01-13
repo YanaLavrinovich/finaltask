@@ -14,4 +14,14 @@ public class TrainingBuilder {
         training.setDateFinish(dateFinish);
         return training;
     }
+
+    public Training build(String userFirstName, String userLastName, String courseStatus, String mark, String comment) {
+        Training training = new Training();
+        training.setUserFirstName(userFirstName);
+        training.setUserLastName(userLastName);
+        training.setCourseStatus(courseStatus);
+        training.setMark(mark);
+        training.setComment(comment);
+        return training;
+    }
 }

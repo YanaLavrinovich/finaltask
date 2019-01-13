@@ -24,4 +24,14 @@ public class UserBuilder {
         newUser.setLastName(lastName);
         return newUser;
     }
+
+    public User build(int userId, String firstName, String lastName, Role role, String isDeleted) {
+        User newUser = new User();
+        newUser.setId(userId);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setRole(role);
+        newUser.setIsDeleted(isDeleted);
+        return newUser;
+    }
 }

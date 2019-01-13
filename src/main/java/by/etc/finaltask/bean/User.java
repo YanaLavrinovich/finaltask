@@ -11,6 +11,7 @@ public class User implements Serializable {
     private String lastName;
     private Sex sex;
     private Role role;
+    private String isDeleted;
 
     public User() {}
 
@@ -60,6 +61,14 @@ public class User implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     @Override

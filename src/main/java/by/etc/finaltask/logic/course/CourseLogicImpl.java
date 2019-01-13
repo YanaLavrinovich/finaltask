@@ -150,11 +150,9 @@ public class CourseLogicImpl implements CourseLogic {
     @Override
     public void removeCourse(String courseId) throws CourseLogicException, InvalidInputException {
         CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
-
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
         }
-
         int id = Integer.valueOf(courseId);
         CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
         try {
@@ -210,7 +208,7 @@ public class CourseLogicImpl implements CourseLogic {
             throw new InvalidInputException("Wrong params in input date");
         }
 
-        if(!courseValidator.isValidDateRange(dateStart, dateFinish)) {
+        if (!courseValidator.isValidDateRange(dateStart, dateFinish)) {
             throw new InvalidInputException("Wrong params in input date");
         }
 
@@ -272,5 +270,101 @@ public class CourseLogicImpl implements CourseLogic {
             throw new CourseLogicException("Can't take list of training.", e);
         }
         return trainingList;
+    }
+
+    @Override
+    public void startTraining(String courseId) throws InvalidInputException, CourseLogicException {
+        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        if (!courseValidator.isValidUserId(courseId)) {
+            throw new InvalidInputException("Wrong id of course");
+        }
+        int id = Integer.valueOf(courseId);
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.startTraining(id);
+        } catch (DaoException | DaoRollbackException e) {
+            throw new CourseLogicException("Can't start course", e);
+        }
+    }
+
+    @Override
+    public void stopTraining(String courseId) throws CourseLogicException, InvalidInputException {
+        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        if (!courseValidator.isValidUserId(courseId)) {
+            throw new InvalidInputException("Wrong id of course");
+        }
+        int id = Integer.valueOf(courseId);
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.stopTraining(id);
+        } catch (DaoException | DaoRollbackException e) {
+            throw new CourseLogicException("Can't start course", e);
+        }
+    }
+
+    @Override
+    public List<Training> takeStudentForCourse(String courseId) throws InvalidInputException, CourseLogicException {
+        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+
+        if (!courseValidator.isValidCourseId(courseId)) {
+            throw new InvalidInputException("Wrong params in input date");
+        }
+
+        int id = Integer.valueOf(courseId);
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        List<Training> trainingList = null;
+        try {
+            trainingList = courseDao.takeStudentForCourse(id);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't take list of students for training.", e);
+        }
+        return trainingList;
+    }
+
+    @Override
+    public String takeCourseRole(String userId, String courseId) throws InvalidInputException, CourseLogicException {
+        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+
+        if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(userId)) {
+            throw new InvalidInputException("Wrong params in input date");
+        }
+
+        int cId = Integer.valueOf(courseId);
+        int uId = Integer.valueOf(userId);
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        String courseStatus = null;
+        try {
+            courseStatus = courseDao.takeCourseStatus(uId, cId);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't take course status.", e);
+        }
+        return courseStatus;
+    }
+
+    @Override
+    public List<Course> findAllCourse() throws CourseLogicException {
+        List<Course> courses;
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courses = courseDao.findAllCourse();
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't get courses.", e);
+        }
+        return courses;
+    }
+
+    @Override
+    public void restoreCourse(String courseId) throws InvalidInputException, CourseLogicException {
+        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        if (!courseValidator.isValidCourseId(courseId)) {
+            throw new InvalidInputException("Wrong params in input date");
+        }
+        int id = Integer.valueOf(courseId);
+        CourseDao courseDao = DaoFactory.getInstance().getCourseDao();
+        try {
+            courseDao.restoreCourse(id);
+        } catch (DaoException e) {
+            throw new CourseLogicException("Can't restore course.", e);
+        }
     }
 }

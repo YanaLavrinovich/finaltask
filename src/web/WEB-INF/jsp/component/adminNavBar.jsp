@@ -13,7 +13,7 @@
     <fmt:message bundle="${loc}" key="locale.language.english.short" var="langEn"/>
     <fmt:message bundle="${loc}" key="locale.language.russian.short" var="langRu"/>
     <fmt:message bundle="${loc}" key="locale.message.courses" var="courses"/>
-    <fmt:message bundle="${loc}" key="locale.message.my.courses" var="myCourses"/>
+    <fmt:message bundle="${loc}" key="locale.message.users" var="users"/>
     <fmt:message bundle="${loc}" key="locale.button.profile" var="profile"/>
     <fmt:message bundle="${loc}" key="locale.button.log.out" var="logout"/>
 
@@ -28,12 +28,12 @@
                    href="controller?command=SHOW_HOME_PAGE">${courses}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="controller?command=SHOW_MY_COURSES_PAGE">${myCourses}</a>
+                <a class="nav-link" href="controller?command=SHOW_ALL_USERS">${users}</a>
             </li>
         </ul>
     </div>
     <div class="navbar-content text-right">
-        <span class="nav-item dropdown">
+            <span class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userInfo"
                    data-toggle="dropdown">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
                 <div class="dropdown-menu" aria-labelledby="userInfo">
@@ -50,6 +50,6 @@
         </span>
     </div>
 </div>
-
 </body>
+
 </html>

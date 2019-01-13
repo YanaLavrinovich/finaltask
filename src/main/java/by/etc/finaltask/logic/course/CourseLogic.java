@@ -37,4 +37,16 @@ public interface CourseLogic {
     void submitCourse(String userId, String courseId) throws InvalidInputException, CourseLogicException;
 
     List<Training> takeTraining(String userId) throws InvalidInputException, CourseLogicException;
+
+    void startTraining(String courseId) throws InvalidInputException, CourseLogicException;
+
+    void stopTraining(String courseId) throws CourseLogicException, InvalidInputException;
+
+    List<Training> takeStudentForCourse(String courseId) throws InvalidInputException, CourseLogicException;
+
+    String takeCourseRole(String userId, String courseId) throws InvalidInputException, CourseLogicException;
+
+    List<Course> findAllCourse() throws CourseLogicException;
+
+    void restoreCourse(String courseId) throws InvalidInputException, CourseLogicException;
 }

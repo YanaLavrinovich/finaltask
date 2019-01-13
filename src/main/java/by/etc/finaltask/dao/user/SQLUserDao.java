@@ -10,10 +10,9 @@ import by.etc.finaltask.dao.connector.ConnectionPoolException;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLUserDao implements UserDao {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -34,6 +33,11 @@ public class SQLUserDao implements UserDao {
     private static final String REJECT_STUDENT_OF_DELETED_COURSE = "UPDATE training" +
                         " SET course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'reject')" +
                         " WHERE courses_id IN (SELECT id FROM courses WHERE users_id = ?)";
+    private static final String EDIT_USER = "UPDATE users SET email = ?, firstName = ?, lastname = ?, sex = ?" +
+            " WHERE id = ?";
+    private static final String RESTORE_USER = "UPDATE users SET isDeleted = 'false' WHERE id = ?";
+    private static final String TAKE_ALL_USERS = "SELECT users.id, firstName, lastname, roles.name, isDeleted FROM users" +
+            " JOIN roles ON roles.id = users.roles_id WHERE roles.name != 'admin'";
 
     public boolean isValidPassword(String login, String password) throws DaoException {
         Connection connection = null;
@@ -232,5 +236,72 @@ public class SQLUserDao implements UserDao {
             connectionPool.closeStatement(courseStatement);
             connectionPool.closeConnection(connection);
         }
+    }
+
+    @Override
+    public void editUser(int userId, String email, String firstName, String lastName, Sex userSex) throws DaoException {
+        Connection connection = null;
+        PreparedStatement userStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            userStatement = connection.prepareStatement(EDIT_USER);
+            userStatement.setString(1, email);
+            userStatement.setString(2, firstName);
+            userStatement.setString(3, lastName);
+            userStatement.setString(4, userSex.toString());
+            userStatement.setInt(5, userId);
+
+            userStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't edit user.", e);
+        } finally {
+            connectionPool.closeStatement(userStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void restoreUser(int userId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement userStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            userStatement = connection.prepareStatement(RESTORE_USER);
+            userStatement.setInt(1, userId);
+            userStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't restore user.", e);
+        } finally {
+            connectionPool.closeStatement(userStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public List<User> findAllUsers() throws DaoException {
+        List<User> users = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            UserBuilder userBuilder = new UserBuilder();
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(TAKE_ALL_USERS);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int userId = resultSet.getInt(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(3);
+                Role role = Role.valueOf(resultSet.getString(4).toUpperCase());
+                String isDeleted = resultSet.getString(5);
+                User user = userBuilder.build(userId, firstName, lastName, role, isDeleted);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't take list of users.", e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+        return users;
     }
 }

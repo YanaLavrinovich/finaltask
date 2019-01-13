@@ -11,4 +11,6 @@ public class JspPagePath {
     public static final String PROFILE_PAGE = "profilePage";
     public static final String EDIT_COURSE_PAGE = "editCoursePage";
     public static final String MY_COURSES_PAGE = "myCoursesPage";
+    public static final String EDIT_PROFILE_PAGE = "editProfilePage";
+    public static final String ALL_USERS = "allUsersPage";
 }

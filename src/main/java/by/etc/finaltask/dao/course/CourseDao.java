@@ -38,4 +38,16 @@ public interface CourseDao {
     void submitCourse(int userId, int courseId) throws DaoException;
 
     List<Training> takeTraining(int userId) throws DaoException;
+
+    void startTraining(int courseId) throws DaoException, DaoRollbackException;
+
+    void stopTraining(int courseId) throws DaoException, DaoRollbackException;
+
+    List<Training> takeStudentForCourse(int courseId) throws DaoException;
+
+    String takeCourseStatus(int userId, int courseId) throws DaoException;
+
+    List<Course> findAllCourse() throws DaoException;
+
+    void restoreCourse(int courseId) throws DaoException;
 }

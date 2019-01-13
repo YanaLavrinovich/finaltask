@@ -18,8 +18,13 @@ public class CourseBuilder {
         course.setDescription(description);
         course.setDateStart(dateStart);
         course.setDateFinish(dateFinish);
-
         course.setUserId(userId);
+        return course;
+    }
+
+    public Course build(int id, String name, String description, String dateStart, String dateFinish, int userId, String progress) {
+        Course course = build(id, name, description, dateStart, dateFinish, userId);
+        course.setProgress(progress);
         return course;
     }
 }

@@ -1,5 +1,9 @@
 package by.etc.finaltask.controller.command;
 
+import by.etc.finaltask.controller.command.admin.AllCourses;
+import by.etc.finaltask.controller.command.admin.AllUsers;
+import by.etc.finaltask.controller.command.admin.RestoreCourse;
+import by.etc.finaltask.controller.command.admin.RestoreUser;
 import by.etc.finaltask.controller.command.common.*;
 import by.etc.finaltask.controller.command.student.ActualCourses;
 import by.etc.finaltask.controller.command.student.ShowMyCoursesPage;
@@ -38,6 +42,14 @@ public class CommandDirector {
         commands.put(CommandType.REMOVE_USER, new RemoveUser());
         commands.put(CommandType.SUBMIT_COURSE, new SubmitCourse());
         commands.put(CommandType.SHOW_MY_COURSES_PAGE, new ShowMyCoursesPage());
+        commands.put(CommandType.SHOW_EDIT_PROFILE_PAGE, new ShowEditProfilePage());
+        commands.put(CommandType.EDIT_PROFILE, new EditProfile());
+        commands.put(CommandType.START_TRAINING, new StartTraining());
+        commands.put(CommandType.STOP_TRAINING, new StopTraining());
+        commands.put(CommandType.ALL_COURSES, new AllCourses());
+        commands.put(CommandType.RESTORE_COURSE, new RestoreCourse());
+        commands.put(CommandType.SHOW_ALL_USERS, new AllUsers());
+        commands.put(CommandType.RESTORE_USER, new RestoreUser());
     }
 
     public Command getCommand(String name) {

@@ -21,7 +21,7 @@ import java.util.Map;
 public class SQLCourseDao implements CourseDao {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String INSERT_COURSE = "INSERT INTO courses VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_COURSE = "INSERT INTO courses VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_COURSE_FOR_TEACHER = "SELECT id, name, description, dateStart, dateFinish FROM courses" +
             " WHERE users_id = ? && isDeleted = 'false'";
     private static final String FIND_REQUEST_FOR_COURSE = "SELECT users.id, email, firstName, lastname, sex FROM training" +
@@ -36,12 +36,12 @@ public class SQLCourseDao implements CourseDao {
             "SET course_status_id = " +
             "(SELECT id FROM course_status WHERE course_status.name = 'approve') " +
             "WHERE courses_id = ? AND users_id = ?";
-    private static final String TAKE_COURSE_BY_ID = "SELECT id, name, description, dateStart, dateFinish, users_id FROM courses" +
+    private static final String TAKE_COURSE_BY_ID = "SELECT id, name, description, dateStart, dateFinish, users_id, progress FROM courses" +
             " WHERE id = ?";
     private static final String TAKE_STUDENTS_BY_COURSE_ID = "SELECT users.id, email, firstName, lastname FROM training" +
             " JOIN users ON training.users_id = users.id" +
             " JOIN course_status ON training.course_status_id = course_status.id" +
-            " WHERE courses_id = ? && course_status.name = 'approve'";
+            " WHERE courses_id = ? && course_status.name IN ('approve', 'in process', 'completed', 'leave', 'excluded')";
     private static final String REMOVE_COURSE = "UPDATE courses" +
             " SET isDeleted = 'true' WHERE id = ?";
     private static final String REJECT_STUDENTS_OF_COURSE = "UPDATE training SET" +
@@ -54,8 +54,8 @@ public class SQLCourseDao implements CourseDao {
             " WHERE courses_id = ? AND users_id = ?";
     private static final String EDIT_COURSE = "UPDATE courses SET name = ?, description = ?, dateStart = ?, dateFinish = ?" +
             " WHERE id = ?";
-    private static final String FIND_ACTUAL_COURSE = "SELECT id, name, description, dateStart, dateFinish, users_id FROM courses" +
-            " WHERE dateStart > ? && isDeleted = 'false'";
+    private static final String FIND_ACTUAL_COURSE = "SELECT id, name, description, dateStart, dateFinish, users_id, isDeleted FROM courses" +
+            " WHERE isDeleted = 'false' && progress = 'planned'";
     private static final String SUBMIT_COURSE = "INSERT INTO training SET" +
             " courses_id = ?, course_status_id = (SELECT id FROM course_status WHERE name = 'requested')," +
             " users_id = ?, users_roles_id = (SELECT id FROM roles WHERE name = 'student')";
@@ -63,6 +63,23 @@ public class SQLCourseDao implements CourseDao {
             " FROM training JOIN courses ON training.courses_id = courses.id" +
             " JOIN course_status ON training.course_status_id = course_status.id" +
             " WHERE training.users_id = ?";
+    private static final String START_COURSE = "UPDATE courses SET progress = 'continues' WHERE id = ?";
+    private static final String SET_STUDENT_IN_PROCESS = "UPDATE training SET course_status_id =" +
+            " (SELECT id FROM course_status WHERE name = 'in process')" +
+            " WHERE courses_id = ? AND course_status_id =" +
+            " (SELECT id FROM course_status WHERE name = 'approve')";
+    private static final String STOP_COURSE = "UPDATE courses SET progress = 'finished' WHERE id = ?";
+    private static final String SET_STUDENT_COMPLETED = "UPDATE training SET course_status_id =" +
+            " (SELECT id FROM course_status WHERE name = 'completed')" +
+            " WHERE courses_id = ?";
+    private static final String TAKE_TRAINING_FOR_COURSE = "SELECT users_id, users.firstName, users.lastname, course_status.name, mark, comment" +
+            " FROM training JOIN users ON training.users_id = users.id" +
+            " JOIN course_status ON training.course_status_id = course_status.id WHERE courses_id = ?";
+    private static final String TAKE_COURSE_STATUS = "SELECT course_status.name FROM training" +
+            " JOIN course_status ON course_status.id = training.course_status_id" +
+            " WHERE users_id = ? AND courses_id = ?";
+    private static final String FIND_ALL_COURSES = "SELECT id, name, description, dateStart, dateFinish, users_id, isDeleted FROM courses";
+    private static final String RESTORE_COURSE = "UPDATE courses SET isDeleted = 'false' WHERE id = ?";
 
     @Override
     public void addCourse(Course course) throws DaoException {
@@ -80,6 +97,7 @@ public class SQLCourseDao implements CourseDao {
             courseStatement.setDate(5, dateFinishSQL);
             courseStatement.setInt(6, course.getUserId());
             courseStatement.setString(7, "false");
+            courseStatement.setString(8, "planned");
 
             courseStatement.execute();
         } catch (SQLException e) {
@@ -210,7 +228,8 @@ public class SQLCourseDao implements CourseDao {
                 String dateStart = resultSet.getString(4);
                 String dateFinish = resultSet.getString(5);
                 int userId = resultSet.getInt(6);
-                course = courseBuilder.build(id, name, description, dateStart, dateFinish, userId);
+                String progress = resultSet.getString(7);
+                course = courseBuilder.build(id, name, description, dateStart, dateFinish, userId, progress);
             }
         } catch (SQLException e) {
             throw new DaoException("Can't take course.", e);
@@ -232,7 +251,7 @@ public class SQLCourseDao implements CourseDao {
             statement = connection.prepareStatement(TAKE_STUDENTS_BY_COURSE_ID);
             statement.setInt(1, courseId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 String email = resultSet.getString(2);
                 String firstName = resultSet.getString(3);
@@ -341,35 +360,7 @@ public class SQLCourseDao implements CourseDao {
 
     @Override
     public List<Course> findActualCourse() throws DaoException {
-        Connection connection = null;
-        PreparedStatement courseStatement = null;
-        ResultSet resultSet = null;
-
-        List<Course> courses = new ArrayList<>();
-        try {
-            connection = connectionPool.takeConnection();
-            courseStatement = connection.prepareStatement(FIND_ACTUAL_COURSE);
-            Date actualDate = new Date(System.currentTimeMillis());
-            courseStatement.setDate(1, actualDate);
-            resultSet = courseStatement.executeQuery();
-            CourseBuilder courseBuilder = new CourseBuilder();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                String description = resultSet.getString(3);
-                String dateStart = resultSet.getString(4);
-                String dateFinish = resultSet.getString(5);
-                int teacherId = resultSet.getInt(6);
-                Course course = courseBuilder.build(id, name, description, dateStart, dateFinish, teacherId);
-                courses.add(course);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Can't get courses.", e);
-        } finally {
-            connectionPool.closeConnection(connection, courseStatement, resultSet);
-        }
-        return courses;
+        return findCourse(FIND_ACTUAL_COURSE);
     }
 
     @Override
@@ -402,7 +393,7 @@ public class SQLCourseDao implements CourseDao {
             statement = connection.prepareStatement(TAKE_TRAINING_BY_ID);
             statement.setInt(1, userId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 String courseName = resultSet.getString(1);
                 String courseStatus = resultSet.getString(2);
                 String mark = resultSet.getString(3);
@@ -417,6 +408,172 @@ public class SQLCourseDao implements CourseDao {
             connectionPool.closeConnection(connection, statement, resultSet);
         }
         return trainingList;
+    }
+
+    @Override
+    public void startTraining(int courseId) throws DaoException, DaoRollbackException {
+        Connection connection = null;
+        PreparedStatement courseStatement = null;
+        PreparedStatement studentStatement = null;
+        try {
+            connection = connectionPool.takeManualCommitConnection();
+            courseStatement = connection.prepareStatement(START_COURSE);
+            courseStatement.setInt(1, courseId);
+            courseStatement.execute();
+            studentStatement = connection.prepareStatement(SET_STUDENT_IN_PROCESS);
+            studentStatement.setInt(1, courseId);
+            studentStatement.execute();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                throw new DaoRollbackException("Can't rollback connection.", e);
+            }
+            throw new DaoException("Can't start course.", e);
+        } catch (ConnectionException e) {
+            throw new DaoException("Can't get connection.", e);
+        } finally {
+            connectionPool.closeStatement(courseStatement);
+            connectionPool.closeStatement(studentStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void stopTraining(int courseId) throws DaoException, DaoRollbackException {
+        Connection connection = null;
+        PreparedStatement courseStatement = null;
+        try {
+            connection = connectionPool.takeManualCommitConnection();
+            courseStatement = connection.prepareStatement(STOP_COURSE);
+            courseStatement.setInt(1, courseId);
+            courseStatement.execute();
+            courseStatement = connection.prepareStatement(SET_STUDENT_COMPLETED);
+            courseStatement.setInt(1, courseId);
+            courseStatement.execute();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                throw new DaoRollbackException("Can't rollback connection.", e);
+            }
+            throw new DaoException("Can't stop course.", e);
+        } catch (ConnectionException e) {
+            throw new DaoException("Can't get connection.", e);
+        } finally {
+            connectionPool.closeStatement(courseStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public List<Training> takeStudentForCourse(int courseId) throws DaoException {
+        List<Training> studentList = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            TrainingBuilder trainingBuilder = new TrainingBuilder();
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(TAKE_TRAINING_FOR_COURSE);
+            statement.setInt(1, courseId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int userId = resultSet.getInt(1);
+                String userFirstName = resultSet.getString(2);
+                String userLastName = resultSet.getString(3);
+                String courseStatus = resultSet.getString(4);
+                String mark = resultSet.getString(5);
+                String comment = resultSet.getString(6);
+                Training training = trainingBuilder.build(userFirstName, userLastName, courseStatus, mark, comment);
+                training.setUserId(userId);
+                studentList.add(training);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't take training list.", e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+        return studentList;
+    }
+
+    @Override
+    public String takeCourseStatus(int userId, int courseId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        String courseStatus = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(TAKE_COURSE_STATUS);
+            statement.setInt(1, userId);
+            statement.setInt(2, courseId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                courseStatus = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't take course status.", e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+        return courseStatus;
+    }
+
+    @Override
+    public List<Course> findAllCourse() throws DaoException {
+        return findCourse(FIND_ALL_COURSES);
+    }
+
+    @Override
+    public void restoreCourse(int courseId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement courseStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            courseStatement = connection.prepareStatement(RESTORE_COURSE);
+            courseStatement.setInt(1, courseId);
+            courseStatement.execute();
+        } catch (SQLException e) {
+            throw new DaoException("Can't restore course.", e);
+        } finally {
+            connectionPool.closeStatement(courseStatement);
+            connectionPool.closeConnection(connection);
+        }
+    }
+
+    private List<Course> findCourse(String select) throws DaoException {
+        Connection connection = null;
+        PreparedStatement courseStatement = null;
+        ResultSet resultSet = null;
+
+        List<Course> courses = new ArrayList<>();
+        try {
+            connection = connectionPool.takeConnection();
+            courseStatement = connection.prepareStatement(select);
+            resultSet = courseStatement.executeQuery();
+            CourseBuilder courseBuilder = new CourseBuilder();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String description = resultSet.getString(3);
+                String dateStart = resultSet.getString(4);
+                String dateFinish = resultSet.getString(5);
+                int teacherId = resultSet.getInt(6);
+                String isDeleted = resultSet.getString(7);
+                Course course = courseBuilder.build(id, name, description, dateStart, dateFinish, teacherId);
+                course.setIsDeleted(isDeleted);
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't get courses.", e);
+        } finally {
+            connectionPool.closeConnection(connection, courseStatement, resultSet);
+        }
+        return courses;
     }
 
 }

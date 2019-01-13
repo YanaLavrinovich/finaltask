@@ -94,6 +94,24 @@
         <url-pattern>/myCoursesPage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>editProfilePage</servlet-name>
+        <jsp-file>/WEB-INF/jsp/common/editProfile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editProfilePage</servlet-name>
+        <url-pattern>/editProfilePage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>allUsersPage</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin/allUsers.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>allUsersPage</servlet-name>
+        <url-pattern>/allUsersPage</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/server_error.jsp</location>

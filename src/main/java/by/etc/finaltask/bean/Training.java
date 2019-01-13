@@ -11,6 +11,9 @@ public class Training implements Serializable {
     private String comment;
     private String dateStart;
     private String dateFinish;
+    private int userId;
+    private String userFirstName;
+    private String userLastName;
 
     public Training() {
     }
@@ -62,6 +65,31 @@ public class Training implements Serializable {
     public void setDateFinish(String dateFinish) {
         this.dateFinish = dateFinish;
     }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

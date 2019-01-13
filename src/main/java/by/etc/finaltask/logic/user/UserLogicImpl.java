@@ -13,6 +13,8 @@ import by.etc.finaltask.logic.exception.UserLogicException;
 import by.etc.finaltask.logic.validator.UserValidator;
 import by.etc.finaltask.logic.validator.ValidatorFactory;
 
+import java.util.List;
+
 public class UserLogicImpl implements UserLogic {
 
     public boolean isValidUser(String email, String password) throws UserLogicException, InvalidInputException {
@@ -105,5 +107,49 @@ public class UserLogicImpl implements UserLogic {
         } catch (DaoException | DaoRollbackException e) {
             throw new UserLogicException("Can't remove user.", e);
         }
+    }
+
+    @Override
+    public void editProfile(String userId, String email, String firstName, String lastName, String sex) throws InvalidInputException, UserLogicException {
+        UserValidator userValidator = ValidatorFactory.getInstance().getUserValidator();
+        if(!userValidator.isValidEditUser(userId, email, firstName, lastName, sex)) {
+            throw new InvalidInputException("Wrong input parameters!");
+        }
+        int id = Integer.valueOf(userId);
+        Sex userSex = Sex.valueOf(sex.toUpperCase());
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        try {
+            userDao.editUser(id, email, firstName, lastName, userSex);
+        } catch (DaoException e) {
+            throw new UserLogicException("Can't edit user.", e);
+        }
+    }
+
+    @Override
+    public void restoreUser(String userId) throws InvalidInputException, UserLogicException {
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+
+        if (!validator.isValidId(userId)) {
+            throw new InvalidInputException("Wrong user id.");
+        }
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        int id = Integer.valueOf(userId);
+        try {
+            userDao.restoreUser(id);
+        } catch (DaoException e) {
+            throw new UserLogicException("Can't restore user.", e);
+        }
+    }
+
+    @Override
+    public List<User> findAllUsers() throws UserLogicException {
+        List<User> users;
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        try {
+            users = userDao.findAllUsers();
+        } catch (DaoException e) {
+            throw new UserLogicException("Can't get list of users.", e);
+        }
+        return users;
     }
 }
