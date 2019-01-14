@@ -4,9 +4,9 @@ import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
 import by.etc.finaltask.logic.LogicFactory;
-import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
+import by.etc.finaltask.logic.training.TrainingLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,9 +20,9 @@ public class AcceptSubscriber implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String studentId = request.getParameter(STUDENT_ID);
         String courseId = request.getParameter(COURSE_ID);
-        CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
+        TrainingLogic trainingLogic = LogicFactory.getInstance().getTrainingLogic();
         try {
-            courseLogic.acceptSubscriber(courseId, studentId);
+            trainingLogic.acceptSubscriber(courseId, studentId);
             Command requestCommand = CommandDirector.getInstance().getCommand(CommandType.SHOW_REQUEST.toString());
             requestCommand.execute(request, response);
         } catch (CourseLogicException | InvalidInputException e) {

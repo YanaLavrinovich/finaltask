@@ -11,12 +11,14 @@ import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
+import by.etc.finaltask.logic.training.TrainingLogic;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Statement;
 import java.util.List;
 
 public class ShowCourse implements Command {
@@ -34,13 +36,15 @@ public class ShowCourse implements Command {
         String userId = String.valueOf(user.getId());
         String courseId = request.getParameter(COURSE_ID);
 
+        TrainingLogic trainingLogic = LogicFactory.getInstance().getTrainingLogic();
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
         if (role.equals(User.Role.TEACHER)) {
             CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
         } else if (role.equals(User.Role.STUDENT)) {
             String courseStatus = null;
             try {
-                courseStatus = courseLogic.takeCourseRole(userId, courseId);
+                courseStatus = trainingLogic.takeCourseStatus(userId, courseId);
+
             } catch (CourseLogicException | InvalidInputException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -49,7 +53,7 @@ public class ShowCourse implements Command {
 
         try {
             Course course = courseLogic.takeCourse(courseId);
-            List<Training> students = courseLogic.takeStudentForCourse(courseId);
+            List<Training> students = trainingLogic.takeStudentForCourse(courseId);
             request.setAttribute(COURSE, course);
             request.setAttribute(STUDENT_LIST, students);
             request.getRequestDispatcher(JspPagePath.COURSE_PAGE).forward(request, response);

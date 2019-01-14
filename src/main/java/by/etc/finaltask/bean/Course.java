@@ -142,7 +142,7 @@ public class Course implements Serializable {
         this.progress = progress;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
@@ -173,7 +173,7 @@ public class Course implements Serializable {
             return false;
         }
         Course course = (Course) obj;
-        return course.getId() == id && course.isDeleted() == isDeleted &&
+        return course.getId() == id && course.getIsDeleted() == isDeleted &&
                 course.getName() != null && course.getName().equals(name) &&
                 course.getDescription() != null && course.getDescription().equals(description) &&
                 course.getDateStart() != null && course.getDateStart().equals(dateStart) &&

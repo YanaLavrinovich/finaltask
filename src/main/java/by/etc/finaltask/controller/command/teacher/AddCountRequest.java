@@ -4,9 +4,9 @@ import by.etc.finaltask.bean.Course;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.logic.LogicFactory;
-import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
+import by.etc.finaltask.logic.training.TrainingLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +25,9 @@ public class AddCountRequest implements Command {
         User user = (User) session.getAttribute(USER);
         String userId = String.valueOf(user.getId());
 
-        CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
+        TrainingLogic trainingLogic = LogicFactory.getInstance().getTrainingLogic();
         try {
-            Map<Course, List<User>> requests = courseLogic.findRequest(userId);
+            Map<Course, List<User>> requests = trainingLogic.findRequest(userId);
             int count = 0;
             for (Map.Entry<Course, List<User>> entry : requests.entrySet()) {
                 List<User> users = entry.getValue();

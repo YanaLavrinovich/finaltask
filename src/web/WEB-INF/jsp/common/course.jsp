@@ -49,14 +49,14 @@
         </div>
         <div class="col-md-4 text-right btns-group">
             <c:if test="${sessionScope.user.role eq 'TEACHER'}">
-                <c:if test="${course.progress eq 'planned'}">
+                <c:if test="${course.progress eq 'PLANNED'}">
                     <form action="controller" method="post">
                         <input type="hidden" name="command" value="START_TRAINING">
                         <input type="hidden" name="courseId" value="${course.id}">
                         <button class="btn btn-sm btn-success"><c:out value="${startTraining}"/></button>
                     </form>
                 </c:if>
-                <c:if test="${course.progress eq 'continues'}">
+                <c:if test="${course.progress eq 'CONTINUES'}">
                     <form action="controller" method="post">
                         <input type="hidden" name="command" value="STOP_TRAINING">
                         <input type="hidden" name="courseId" value="${course.id}">
@@ -84,10 +84,10 @@
                         <button class="btn btn-sm btn-danger"><c:out value="${submit}"/></button>
                     </form>
                 </c:if>
-                <c:if test="${courseStatus eq 'requested'}">
+                <c:if test="${courseStatus eq 'REQUESTED'}">
                     <p style="color: crimson">You submit on this course!</p>
                 </c:if>
-                <c:if test="${courseStatus eq 'reject'}">
+                <c:if test="${courseStatus eq 'REJECTED'}">
                     <p style="color: crimson">Sorry! You was be rejected.</p>
                 </c:if>
             </c:if>
@@ -120,22 +120,22 @@
                             <th scope="row"><c:out value="${studentLoopCout.count}"/></th>
                             <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${student.userId}'">
                                 <c:out value="${student.userFirstName} ${student.userLastName}"/></td>
-                            <c:if test="${student.courseStatus eq 'in process'}">
+                            <c:if test="${student.courseStatus eq 'IN_PROCESS'}">
                                 <td><span class="badge badge-success"><c:out value="${student.courseStatus}"/></span>
                                 </td>
                             </c:if>
-                            <c:if test="${student.courseStatus eq 'approve'}">
+                            <c:if test="${student.courseStatus eq 'APPROVED'}">
                                 <td><span class="badge badge-info"><c:out value="${student.courseStatus}"/></span></td>
                             </c:if>
-                            <c:if test="${student.courseStatus eq 'completed'}">
+                            <c:if test="${student.courseStatus eq 'COMPLETED'}">
                                 <td><span class="badge badge-secondary"><c:out value="${student.courseStatus}"/></span>
                                 </td>
                             </c:if>
-                            <c:if test="${student.courseStatus eq 'requested'}">
+                            <c:if test="${student.courseStatus eq 'REQUESTED'}">
                                 <td><span class="badge badge-warning"><c:out value="${student.courseStatus}"/></span>
                                 </td>
                             </c:if>
-                            <c:if test="${student.courseStatus eq 'excluded' or 'leave'}">
+                            <c:if test="${student.courseStatus eq 'EXCLUDED' or student.courseStatus eq 'LEAVED'}">
                                 <td><span class="badge badge-danger"><c:out value="${student.courseStatus}"/></span>
                                 </td>
                             </c:if>
@@ -146,7 +146,7 @@
                                 <td><c:out value="${student.comment}"/></td>
                             </c:if>
                             <td class="text-right btns-group">
-                                <c:if test="${course.progress eq 'finished'}">
+                                <c:if test="${course.progress eq 'FINISHED'}">
                                     <form method="post" action="controller">
                                         <input type="hidden" name="command" value="SHOW_MARK_PAGE">
                                         <input type="hidden" name="studentId" value="${student.userId}">
@@ -154,7 +154,7 @@
                                         <button class="btn btn-sm btn-info"><c:out value="${setMark}"/></button>
                                     </form>
                                 </c:if>
-                                <c:if test="${course.progress eq 'continues'}">
+                                <c:if test="${course.progress eq 'CONTINUES'}">
                                     <form method="post" action="controller">
                                         <input type="hidden" name="command" value="EXCLUDE_STUDENT">
                                         <input type="hidden" name="studentId" value="${student.userId}">

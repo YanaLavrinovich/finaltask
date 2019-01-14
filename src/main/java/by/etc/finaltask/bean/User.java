@@ -67,6 +67,10 @@ public class User implements Serializable {
         Sex(String stringValue) {
             this.stringValue = stringValue;
         }
+
+        public String getStringValue() {
+            return stringValue;
+        }
     }
 
     /**
@@ -77,17 +81,27 @@ public class User implements Serializable {
         /**
          * The admin role.
          */
-        ADMIN,
+        ADMIN("admin"),
 
         /**
          * The teacher role.
          */
-        TEACHER,
+        TEACHER("teacher"),
 
         /**
          * The student role.
          */
-        STUDENT;
+        STUDENT("student");
+
+        private String stringValue;
+
+        Role(String stringValue) {
+            this.stringValue = stringValue;
+        }
+
+        public String getStringValue() {
+            return stringValue;
+        }
     }
 
     public User() {
@@ -141,7 +155,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
@@ -171,7 +185,7 @@ public class User implements Serializable {
             return false;
         }
         User user = (User) obj;
-        return user.getId() == id && user.isDeleted() == isDeleted &&
+        return user.getId() == id && user.getIsDeleted() == isDeleted &&
                 user.getEmail() != null && user.getEmail().equals(email) &&
                 user.getFirstName() != null && user.getFirstName().equals(firstName) &&
                 user.getLastName() != null && user.getLastName().equals(lastName) &&

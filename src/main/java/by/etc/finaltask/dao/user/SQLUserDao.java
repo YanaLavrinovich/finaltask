@@ -1,7 +1,5 @@
 package by.etc.finaltask.dao.user;
 
-import by.etc.finaltask.bean.Role;
-import by.etc.finaltask.bean.Sex;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.bean.build_bean.UserBuilder;
 import by.etc.finaltask.dao.connector.ConnectionException;
@@ -10,7 +8,10 @@ import by.etc.finaltask.dao.connector.ConnectionPoolException;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,20 +27,20 @@ public class SQLUserDao implements UserDao {
             " JOIN roles ON users.roles_id = roles.id WHERE users.id = ?";
     private static final String REMOVE_USER = "UPDATE users SET isDeleted = 'true' WHERE id = ?";
     private static final String REMOVE_USER_OF_COURSE = "UPDATE training" +
-            " SET course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'leave')" +
+            " SET course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'leaved')" +
             " WHERE users_id = ?";
     private static final String REMOVE_COURSES_OF_USER = "UPDATE courses" +
             " SET isDeleted = 'true' WHERE users_id = ?";
     private static final String REJECT_STUDENT_OF_DELETED_COURSE = "UPDATE training" +
-                        " SET course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'reject')" +
-                        " WHERE courses_id IN (SELECT id FROM courses WHERE users_id = ?)";
+            " SET course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'rejected')" +
+            " WHERE courses_id IN (SELECT id FROM courses WHERE users_id = ?)";
     private static final String EDIT_USER = "UPDATE users SET email = ?, firstName = ?, lastname = ?, sex = ?" +
             " WHERE id = ?";
     private static final String RESTORE_USER = "UPDATE users SET isDeleted = 'false' WHERE id = ?";
     private static final String TAKE_ALL_USERS = "SELECT users.id, firstName, lastname, roles.name, isDeleted FROM users" +
             " JOIN roles ON roles.id = users.roles_id WHERE roles.name != 'admin'";
 
-    public boolean isValidPassword(String login, String password) throws DaoException {
+    public boolean isValidPassword(String email, String password) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -49,7 +50,7 @@ public class SQLUserDao implements UserDao {
             connection = connectionPool.takeConnection();
 
             statement = connection.prepareStatement(CHECK_PASSWORD);
-            statement.setString(1, login);
+            statement.setString(1, email);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
 
@@ -66,7 +67,7 @@ public class SQLUserDao implements UserDao {
         return !countFromBase.equals("0");
     }
 
-    public void registration(User newUser, String password) throws DaoException, DaoRollbackException {
+    public void register(User newUser, String password) throws DaoException, DaoRollbackException {
         Connection connection = null;
         PreparedStatement userStatement = null;
         PreparedStatement roleStatement = null;
@@ -126,8 +127,8 @@ public class SQLUserDao implements UserDao {
                 user.setEmail(resultSet.getString(2));
                 user.setFirstName(resultSet.getString(3));
                 user.setLastName(resultSet.getString(4));
-                user.setSex(Sex.valueOf(resultSet.getString(5).toUpperCase()));
-                user.setRole(Role.valueOf(resultSet.getString(6).toUpperCase()));
+                user.setSex(User.Sex.valueOf(resultSet.getString(5).toUpperCase()));
+                user.setRole(User.Role.valueOf(resultSet.getString(6).toUpperCase()));
             }
             return user;
         } catch (SQLException e) {
@@ -155,10 +156,15 @@ public class SQLUserDao implements UserDao {
                 String email = resultSet.getString(1);
                 String firstName = resultSet.getString(2);
                 String lastName = resultSet.getString(3);
-                Sex sex = Sex.valueOf(resultSet.getString(4).toUpperCase());
-                Role role = Role.valueOf(resultSet.getString(5).toUpperCase());
-                user = userBuilder.build(email, firstName, lastName, sex, role);
-                user.setId(userId);
+                String sex = resultSet.getString(4);
+                String role = resultSet.getString(5);
+                userBuilder.addId(userId);
+                userBuilder.addEmail(email);
+                userBuilder.addFirstName(firstName);
+                userBuilder.addLastName(lastName);
+                userBuilder.addSex(sex);
+                userBuilder.addRole(role);
+                user = userBuilder.build();
             }
         } catch (SQLException e) {
             throw new DaoException("Can't take user.", e);
@@ -172,18 +178,15 @@ public class SQLUserDao implements UserDao {
     public void removeStudent(int userId) throws DaoRollbackException, DaoException {
         Connection connection = null;
         PreparedStatement trainingStatement = null;
-        PreparedStatement userStatement = null;
         try {
             connection = connectionPool.takeManualCommitConnection();
-            userStatement = connection.prepareStatement(REMOVE_USER);
-            userStatement.setInt(1, userId);
-            userStatement.execute();
+            removeUser(userId, connection);
 
             trainingStatement = connection.prepareStatement(REMOVE_USER_OF_COURSE);
             trainingStatement.setInt(1, userId);
             trainingStatement.execute();
-            connection.commit();
 
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -203,13 +206,10 @@ public class SQLUserDao implements UserDao {
     public void removeTeacher(int userId) throws DaoRollbackException, DaoException {
         Connection connection = null;
         PreparedStatement courseStatement = null;
-        PreparedStatement userStatement = null;
         PreparedStatement trainingStatement = null;
         try {
             connection = connectionPool.takeManualCommitConnection();
-            userStatement = connection.prepareStatement(REMOVE_USER);
-            userStatement.setInt(1, userId);
-            userStatement.execute();
+            removeUser(userId, connection);
 
             courseStatement = connection.prepareStatement(REMOVE_COURSES_OF_USER);
             courseStatement.setInt(1, userId);
@@ -231,7 +231,6 @@ public class SQLUserDao implements UserDao {
         } catch (ConnectionException e) {
             throw new DaoException("Can't get connection.", e);
         } finally {
-            connectionPool.closeStatement(userStatement);
             connectionPool.closeStatement(trainingStatement);
             connectionPool.closeStatement(courseStatement);
             connectionPool.closeConnection(connection);
@@ -239,7 +238,7 @@ public class SQLUserDao implements UserDao {
     }
 
     @Override
-    public void editUser(int userId, String email, String firstName, String lastName, Sex userSex) throws DaoException {
+    public void editUser(int userId, String email, String firstName, String lastName, User.Sex userSex) throws DaoException {
         Connection connection = null;
         PreparedStatement userStatement = null;
         try {
@@ -292,9 +291,14 @@ public class SQLUserDao implements UserDao {
                 int userId = resultSet.getInt(1);
                 String firstName = resultSet.getString(2);
                 String lastName = resultSet.getString(3);
-                Role role = Role.valueOf(resultSet.getString(4).toUpperCase());
-                String isDeleted = resultSet.getString(5);
-                User user = userBuilder.build(userId, firstName, lastName, role, isDeleted);
+                String role = resultSet.getString(4);
+                boolean isDeleted = resultSet.getBoolean(5);
+                userBuilder.addId(userId);
+                userBuilder.addFirstName(firstName);
+                userBuilder.addLastName(lastName);
+                userBuilder.addRole(role);
+                userBuilder.addIsDeleted(isDeleted);
+                User user = userBuilder.build();
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -303,5 +307,16 @@ public class SQLUserDao implements UserDao {
             connectionPool.closeConnection(connection, statement, resultSet);
         }
         return users;
+    }
+
+    private void removeUser(int userId, Connection connection) throws SQLException {
+        PreparedStatement userStatement = null;
+        try {
+            userStatement = connection.prepareStatement(REMOVE_USER);
+            userStatement.setInt(1, userId);
+            userStatement.execute();
+        } finally {
+            connectionPool.closeStatement(userStatement);
+        }
     }
 }

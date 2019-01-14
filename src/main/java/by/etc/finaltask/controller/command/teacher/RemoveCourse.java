@@ -14,6 +14,7 @@ import java.io.IOException;
 
 public class RemoveCourse implements Command {
     private static final String COURSE_ID = "courseId";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String courseId = request.getParameter(COURSE_ID);

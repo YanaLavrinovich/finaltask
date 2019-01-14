@@ -29,8 +29,9 @@ public class RemoveUser implements Command {
         if (role.equals(User.Role.ADMIN)) {
             id = request.getParameter(USER_ID);
             userRole = request.getParameter(USER_ROLE);
+            userRole = userRole.toLowerCase();
         } else {
-            userRole = String.valueOf(role);
+            userRole = String.valueOf(role).toLowerCase();
         }
         UserLogic userLogic = LogicFactory.getInstance().getUserLogic();
         try {

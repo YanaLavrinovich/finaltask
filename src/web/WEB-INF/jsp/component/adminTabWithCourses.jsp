@@ -37,17 +37,17 @@
                         <td class="text-right btns-group">
                             <form method="post" action="controller">
                                 <input type="hidden" name="command" value="SHOW_EDIT_COURSE_PAGE">
-                                <input type="hidden" name="courseId" value="${course.userId}">
+                                <input type="hidden" name="courseId" value="${course.id}">
                                 <button class="btn btn-sm btn-info"><c:out value="${edit}"/></button>
                             </form>
-                            <c:if test="${course.isDeleted eq false}">
+                            <c:if test="${not course.isDeleted}">
                                 <form method="post" action="controller">
                                     <input type="hidden" name="command" value="REMOVE_COURSE">
                                     <input type="hidden" name="courseId" value="${course.id}">
                                     <button class="btn btn-sm btn-danger"><c:out value="${remove}"/></button>
                                 </form>
                             </c:if>
-                            <c:if test="${course.isDeleted eq true}">
+                            <c:if test="${course.isDeleted}">
                                 <form method="post" action="controller">
                                     <input type="hidden" name="command" value="RESTORE_COURSE">
                                     <input type="hidden" name="courseId" value="${course.id}">

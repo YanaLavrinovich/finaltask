@@ -1,7 +1,5 @@
 package by.etc.finaltask.logic.user;
 
-import by.etc.finaltask.bean.Role;
-import by.etc.finaltask.bean.Sex;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.bean.build_bean.UserBuilder;
 import by.etc.finaltask.dao.DaoFactory;
@@ -10,7 +8,8 @@ import by.etc.finaltask.dao.exception.DaoRollbackException;
 import by.etc.finaltask.dao.user.UserDao;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.exception.UserLogicException;
-import by.etc.finaltask.logic.validation.UserValidatorImpl;
+import by.etc.finaltask.logic.validation.UserValidator;
+import by.etc.finaltask.logic.validation.ValidationException;
 import by.etc.finaltask.logic.validation.ValidatorFactory;
 
 import java.util.List;
@@ -18,10 +17,13 @@ import java.util.List;
 public class UserLogicImpl implements UserLogic {
 
     public boolean isValidUser(String email, String password) throws UserLogicException, InvalidInputException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidEmail(email) || !validator.isValidPassword(password)) {
-            throw new InvalidInputException("Wrong email or password");
+        try {
+            validator.isValidEmail(email);
+            validator.isValidPassword(password);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong email or password", e);
         }
 
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -33,10 +35,12 @@ public class UserLogicImpl implements UserLogic {
     }
 
     public User getUserInformation(String email) throws UserLogicException, InvalidInputException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidEmail(email)) {
-            throw new InvalidInputException("Wrong email");
+        try {
+            validator.isValidEmail(email);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong email", e);
         }
 
         UserDao userDao = DaoFactory.getInstance().getUserDao();
@@ -51,21 +55,26 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void addNewUser(String email, String firstName, String lastName, String sex, String role, String password) throws UserLogicException, InvalidInputException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidUserInfo(email, firstName, lastName, sex, role) || !validator.isValidPassword(password)) {
-            throw new InvalidInputException("Wrong params in new user.");
+        try {
+            validator.isValidUserInfo(email, firstName, lastName, sex, role);
+            validator.isValidPassword(password);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong params in new user.", e);
         }
 
-        Sex userSex = Sex.valueOf(sex.toUpperCase());
-        Role userRole = Role.valueOf(role.toUpperCase());
-
         UserBuilder builder = new UserBuilder();
-        User user = builder.build(email, firstName, lastName, userSex, userRole);
+        builder.addEmail(email);
+        builder.addFirstName(firstName);
+        builder.addLastName(lastName);
+        builder.addSex(sex);
+        builder.addRole(role);
+        User user = builder.build();
 
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         try {
-            userDao.registration(user, password);
+            userDao.register(user, password);
         } catch (DaoException | DaoRollbackException e) {
             throw new UserLogicException("Can't add new user in base.", e);
         }
@@ -73,11 +82,14 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public User takeUser(String userId) throws UserLogicException, InvalidInputException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidId(userId)) {
-            throw new InvalidInputException("Wrong user id." + userId);
+        try {
+            validator.isValidId(userId);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong user id." + userId, e);
         }
+
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         User user = null;
         int id = Integer.valueOf(userId);
@@ -91,17 +103,21 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void remove(String userId, String role) throws InvalidInputException, UserLogicException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidId(userId) || !validator.isValidRole(role)) {
-            throw new InvalidInputException("Wrong user id or role.");
+        try {
+            validator.isValidId(userId);
+            validator.isValidRole(role);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong user id or role.", e);
         }
+
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         int id = Integer.valueOf(userId);
         try {
-            if(role.toUpperCase().equals(Role.TEACHER.toString())) {
+            if(role.equals(User.Role.TEACHER.getStringValue())) {
                 userDao.removeTeacher(id);
-            } else if(role.toUpperCase().equals(Role.STUDENT.toString())) {
+            } else if(role.equals(User.Role.STUDENT.getStringValue())) {
                 userDao.removeStudent(id);
             }
         } catch (DaoException | DaoRollbackException e) {
@@ -111,12 +127,16 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void editProfile(String userId, String email, String firstName, String lastName, String sex) throws InvalidInputException, UserLogicException {
-        UserValidatorImpl userValidator = ValidatorFactory.getInstance().getUserValidator();
-        if(!userValidator.isValidEditUser(userId, email, firstName, lastName, sex)) {
-            throw new InvalidInputException("Wrong input parameters!");
+        UserValidator userValidator = ValidatorFactory.getInstance().getUserValidator();
+
+        try {
+            userValidator.isValidEditUser(userId, email, firstName, lastName, sex);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong input parameters!", e);
         }
+
         int id = Integer.valueOf(userId);
-        Sex userSex = Sex.valueOf(sex.toUpperCase());
+        User.Sex userSex = User.Sex.valueOf(sex.toUpperCase());
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         try {
             userDao.editUser(id, email, firstName, lastName, userSex);
@@ -127,11 +147,14 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void restoreUser(String userId) throws InvalidInputException, UserLogicException {
-        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
 
-        if (!validator.isValidId(userId)) {
-            throw new InvalidInputException("Wrong user id.");
+        try {
+            validator.isValidId(userId);
+        } catch (ValidationException e) {
+            throw new InvalidInputException("Wrong user id.", e);
         }
+
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         int id = Integer.valueOf(userId);
         try {

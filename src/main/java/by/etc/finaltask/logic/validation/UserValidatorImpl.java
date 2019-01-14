@@ -6,8 +6,8 @@ public class UserValidatorImpl implements UserValidator {
     private static final String PASSWORD_REGEX = "^[\\w\\d._]{4,12}$";
     private static final String EMAIL_REGEX = "^[\\w._\\d-]+@[A-Za-z]+.[A-Za-z]{2,3}$";
     private static final String NAME_REGEX = "^[\\w[А-я]]+$";
-    private static final String SEX_REGEX = "^(female|male)$";
-    private static final String ROLE_REGEX = "^(admin|teacher|student)$";
+    private static final String SEX_REGEX = "^(FEMALE|MALE)$";
+    private static final String ROLE_REGEX = "^(ADMIN|TEACHER|STUDENT)$";
 
     /**
      * @see UserValidator#isValidId(String)
@@ -71,7 +71,7 @@ public class UserValidatorImpl implements UserValidator {
      * @see UserValidator#isValidSex(String)
      */
     public void isValidSex(String sex) throws ValidationException {
-        if (sex == null || !sex.matches(SEX_REGEX)) {
+        if (sex == null || !sex.toUpperCase().matches(SEX_REGEX)) {
             throw new ValidationException("The user's sex is wrong. It is null or has incorrect data");
         }
     }

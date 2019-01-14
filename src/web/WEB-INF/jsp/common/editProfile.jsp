@@ -89,8 +89,8 @@
                     <label for="sex">${sex}</label>
                     <select name="sex" class="custom-select d-block w-100" id="sex" required="">
                         <option value="">${choose}</option>
-                        <option>${female}</option>
-                        <option>${male}</option>
+                        <option value="female">${female}</option>
+                        <option value="male">${male}</option>
                     </select>
                     <div class="invalid-feedback">
                         ${errorSex}

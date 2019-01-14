@@ -7,9 +7,9 @@ import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
 import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
-import by.etc.finaltask.logic.course.CourseLogic;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
+import by.etc.finaltask.logic.training.TrainingLogic;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +30,9 @@ public class ShowRequest implements Command {
         String userId = String.valueOf(user.getId());
         CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
 
-        CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
+        TrainingLogic trainingLogic = LogicFactory.getInstance().getTrainingLogic();
         try {
-            Map<Course, List<User>> requests = courseLogic.findRequest(userId);
+            Map<Course, List<User>> requests = trainingLogic.findRequest(userId);
             request.setAttribute(REQUEST_MAP, requests);
 
             request.getRequestDispatcher(JspPagePath.REQUEST_PAGE).forward(request, response);

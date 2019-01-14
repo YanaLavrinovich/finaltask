@@ -44,7 +44,7 @@
                                 <input type="hidden" name="userId" value="${user.id}">
                                 <button class="btn btn-sm btn-info"><c:out value="${edit}"/></button>
                             </form>
-                            <c:if test="${user.isDeleted eq false}">
+                            <c:if test="${not user.isDeleted}">
                                 <form method="post" action="controller">
                                     <input type="hidden" name="command" value="REMOVE_USER">
                                     <input type="hidden" name="userId" value="${user.id}">
@@ -52,7 +52,7 @@
                                     <button class="btn btn-sm btn-danger"><c:out value="${remove}"/></button>
                                 </form>
                             </c:if>
-                            <c:if test="${user.isDeleted eq true}">
+                            <c:if test="${user.isDeleted}">
                                 <form method="post" action="controller">
                                     <input type="hidden" name="command" value="RESTORE_USER">
                                     <input type="hidden" name="userId" value="${user.id}">

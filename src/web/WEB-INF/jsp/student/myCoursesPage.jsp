@@ -11,6 +11,7 @@
     <fmt:setBundle basename="locale.locale" var="loc"/>
 
     <fmt:message bundle="${loc}" key="locale.message.my.courses" var="myCourses"/>
+    <fmt:message bundle="${loc}" key="locale.button.leave" var="leave"/>
 
 
 </head>
@@ -33,20 +34,20 @@
                     <tr>
                         <th scope="row"><c:out value="${trainingLoopCout.count}"/></th>
                         <td><c:out value="${training.nameCourse}"/></td>
-                        <c:if test="${training.courseStatus eq 'in progress'}">
+                        <c:if test="${training.courseStatus eq 'IN_PROCESS'}">
                             <td><span class="badge badge-success"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'approve'}">
+                        <c:if test="${training.courseStatus eq 'APPROVED'}">
                             <td><span class="badge badge-info"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'completed'}">
+                        <c:if test="${training.courseStatus eq 'COMPLETED'}">
                             <td><span class="badge badge-secondary"><c:out value="${training.courseStatus}"/></span>
                             </td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'requested'}">
+                        <c:if test="${training.courseStatus eq 'REQUESTED'}">
                             <td><span class="badge badge-warning"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'excluded' or training.courseStatus eq 'leave' or training.courseStatus eq 'reject'}">
+                        <c:if test="${training.courseStatus eq 'EXCLUDED' or training.courseStatus eq 'LEAVED' or training.courseStatus eq 'REJECTED'}">
                             <td><span class="badge badge-danger"><c:out value="${training.courseStatus}"/></span></td>
                         </c:if>
                         <td><c:out value="${training.dateStart} - ${training.dateFinish}"/></td>
@@ -56,9 +57,9 @@
                         <c:if test="${training.comment ne null}">
                             <td><c:out value="${training.comment}"/></td>
                         </c:if>
-                        <c:if test="${training.courseStatus eq 'in progress'}">
+                        <c:if test="${training.courseStatus eq 'IN_PROCESS'}">
                             <td class="text-right">
-                                <button class="btn btn-sm btn-danger">Leave</button>
+                                <button class="btn btn-sm btn-danger">${leave}</button>
                             </td>
                         </c:if>
                     </tr>
