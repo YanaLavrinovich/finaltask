@@ -47,11 +47,11 @@
                                         data-target="#collapse${requestEntry.key.id}"
                                         aria-expanded="true" aria-controls="collapse${requestEntry.key.id}">
                                     <c:out value="${requestEntry.key.name} "/>
-                                    <c:forEach items="${requestEntry.value}" var="requestEntity"
-                                               varStatus="requestLoop">
-                                    <span class="badge badge-info badge-pill"><c:out value="${requestLoop.count}"/>
+                                    <c:if test="${requestEntry.value.size() ne '0'}">
+                                    <span class="badge badge-info badge-pill"><c:out
+                                            value="${requestEntry.value.size()}"/>
                                     </span>
-                                    </c:forEach>
+                                    </c:if>
                                 </button>
                             </h5>
                         </div>
@@ -64,8 +64,9 @@
                                                varStatus="requestLoop">
                                         <tr>
                                             <th scope="row"><c:out value="${requestLoop.count}"/></th>
-                                            <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${requestEntity.id}'"><c:out
-                                                    value="${requestEntity.firstName} ${requestEntity.lastName}"/></td>
+                                            <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${requestEntity.id}'">
+                                                <c:out
+                                                        value="${requestEntity.firstName} ${requestEntity.lastName}"/></td>
                                             <td class="text-right">
                                                 <div class="btn-group">
                                                     <form action="controller" method="post">
