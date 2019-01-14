@@ -55,12 +55,18 @@ public class User implements Serializable {
         /**
          * The female sex.
          */
-        FEMALE,
+        FEMALE("female"),
 
         /**
          * The male sex.
          */
-        MALE;
+        MALE("male");
+
+        private String stringValue;
+
+        Sex(String stringValue) {
+            this.stringValue = stringValue;
+        }
     }
 
     /**

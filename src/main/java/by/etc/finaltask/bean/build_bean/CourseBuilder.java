@@ -1,12 +1,12 @@
 package by.etc.finaltask.bean.build_bean;
 
 import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.logic.validator.CourseValidator;
+import by.etc.finaltask.logic.validation.CourseValidatorImpl;
 
 import java.io.Serializable;
 
 /**
- * Build course. Parameters are validated with {@link CourseValidator}.
+ * Build course. Parameters are validated with {@link CourseValidatorImpl}.
  */
 public class CourseBuilder implements Serializable {
     private static final long serialVersionUID = 2296897445903644174L;

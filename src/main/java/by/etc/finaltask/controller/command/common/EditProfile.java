@@ -3,7 +3,6 @@ package by.etc.finaltask.controller.command.common;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
-import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.exception.UserLogicException;
@@ -11,7 +10,6 @@ import by.etc.finaltask.logic.user.UserLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class EditProfile implements Command {

@@ -1,6 +1,5 @@
 package by.etc.finaltask.controller.command.common;
 
-import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
@@ -22,17 +21,17 @@ public class ShowHomePage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        Role role = user.getRole();
+        User.Role role = user.getRole();
 
         List<Command> commands = new ArrayList<>();
-        if (role.equals(Role.TEACHER)) {
+        if (role.equals(User.Role.TEACHER)) {
             commands.add(CommandDirector.getInstance().getCommand(CommandType.TEACHER_COURSE.toString()));
             commands.add(CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()));
         }
-        if (role.equals(Role.STUDENT)) {
+        if (role.equals(User.Role.STUDENT)) {
             commands.add(CommandDirector.getInstance().getCommand(CommandType.ACTUAL_COURSES.toString()));
         }
-        if(role.equals(Role.ADMIN)) {
+        if (role.equals(User.Role.ADMIN)) {
             commands.add(CommandDirector.getInstance().getCommand(CommandType.ALL_COURSES.toString()));
         }
         for (Command command : commands) {

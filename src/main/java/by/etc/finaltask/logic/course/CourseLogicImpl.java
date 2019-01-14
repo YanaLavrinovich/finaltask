@@ -10,8 +10,8 @@ import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
-import by.etc.finaltask.logic.validator.CourseValidator;
-import by.etc.finaltask.logic.validator.ValidatorFactory;
+import by.etc.finaltask.logic.validation.CourseValidatorImpl;
+import by.etc.finaltask.logic.validation.ValidatorFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class CourseLogicImpl implements CourseLogic {
     @Override
     public void addCourse(String name, String description, String dateStart, String dateFinish, String userId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourse(name, dateStart, dateFinish, userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -38,7 +38,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public List<Course> findCourseForTeacher(String userId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidUserId(userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -56,7 +56,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public Map<Course, List<User>> findRequest(String userId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidUserId(userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -74,7 +74,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void rejectSubscriber(String courseId, String studentId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(studentId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -92,7 +92,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void acceptSubscriber(String courseId, String studentId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(studentId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -110,7 +110,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public Course takeCourse(String courseId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -129,7 +129,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public List<User> takeStudent(String courseId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -149,7 +149,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void removeCourse(String courseId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
         }
@@ -164,7 +164,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void excludeStudent(String courseId, String studentId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(studentId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -182,7 +182,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void setMark(String courseId, String studentId, String mark, String comment) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(studentId) ||
                 !courseValidator.isValidMark(mark)) {
@@ -203,7 +203,7 @@ public class CourseLogicImpl implements CourseLogic {
     @Override
     public void editCourse(String courseId, String nameCourse, String description, String dateStart, String dateFinish)
             throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidCourse(nameCourse, dateStart, dateFinish)) {
             throw new InvalidInputException("Wrong params in input date");
         }
@@ -236,7 +236,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void submitCourse(String userId, String courseId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -255,7 +255,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public List<Training> takeTraining(String userId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidUserId(userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -274,7 +274,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void startTraining(String courseId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
         if (!courseValidator.isValidUserId(courseId)) {
             throw new InvalidInputException("Wrong id of course");
         }
@@ -289,7 +289,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void stopTraining(String courseId) throws CourseLogicException, InvalidInputException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
         if (!courseValidator.isValidUserId(courseId)) {
             throw new InvalidInputException("Wrong id of course");
         }
@@ -304,7 +304,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public List<Training> takeStudentForCourse(String courseId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -323,7 +323,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public String takeCourseRole(String userId, String courseId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
 
         if (!courseValidator.isValidCourseId(courseId) || !courseValidator.isValidUserId(userId)) {
             throw new InvalidInputException("Wrong params in input date");
@@ -355,7 +355,7 @@ public class CourseLogicImpl implements CourseLogic {
 
     @Override
     public void restoreCourse(String courseId) throws InvalidInputException, CourseLogicException {
-        CourseValidator courseValidator = ValidatorFactory.getInstance().getCourseValidator();
+        CourseValidatorImpl courseValidator = ValidatorFactory.getInstance().getCourseValidator();
         if (!courseValidator.isValidCourseId(courseId)) {
             throw new InvalidInputException("Wrong params in input date");
         }

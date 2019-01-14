@@ -1,8 +1,7 @@
 package by.etc.finaltask.bean.build_bean;
 
 import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
-import by.etc.finaltask.logic.validator.TrainingValidator;
+import by.etc.finaltask.logic.validation.TrainingValidator;
 
 import java.io.Serializable;
 

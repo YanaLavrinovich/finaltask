@@ -1,12 +1,12 @@
 package by.etc.finaltask.bean.build_bean;
 
 import by.etc.finaltask.bean.User;
-import by.etc.finaltask.logic.validator.UserValidator;
+import by.etc.finaltask.logic.validation.UserValidatorImpl;
 
 import java.io.Serializable;
 
 /**
- * Build user. Parameters are validated with {@link UserValidator}.
+ * Build user. Parameters are validated with {@link UserValidatorImpl}.
  */
 public class UserBuilder implements Serializable {
     private static final long serialVersionUID = 2299823445903644174L;

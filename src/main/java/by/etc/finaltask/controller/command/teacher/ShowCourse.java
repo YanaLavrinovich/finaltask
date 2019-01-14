@@ -1,7 +1,6 @@
 package by.etc.finaltask.controller.command.teacher;
 
 import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.Training;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
@@ -31,19 +30,19 @@ public class ShowCourse implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        Role role = user.getRole();
+        User.Role role = user.getRole();
         String userId = String.valueOf(user.getId());
         String courseId = request.getParameter(COURSE_ID);
 
         CourseLogic courseLogic = LogicFactory.getInstance().getCourseLogic();
-        if(role.equals(Role.TEACHER)) {
+        if (role.equals(User.Role.TEACHER)) {
             CommandDirector.getInstance().getCommand(CommandType.ADD_COUNT_REQUEST.toString()).execute(request, response);
-        } else if(role.equals(Role.STUDENT)) {
+        } else if (role.equals(User.Role.STUDENT)) {
             String courseStatus = null;
             try {
                 courseStatus = courseLogic.takeCourseRole(userId, courseId);
             } catch (CourseLogicException | InvalidInputException e) {
-               response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
             request.setAttribute(COURSE_STATUS, courseStatus);
         }

@@ -2,8 +2,6 @@ package by.etc.finaltask.controller.command.admin;
 
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
-import by.etc.finaltask.controller.command.CommandDirector;
-import by.etc.finaltask.controller.command.CommandType;
 import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.exception.UserLogicException;

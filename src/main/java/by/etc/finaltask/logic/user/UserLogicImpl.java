@@ -10,15 +10,15 @@ import by.etc.finaltask.dao.exception.DaoRollbackException;
 import by.etc.finaltask.dao.user.UserDao;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.exception.UserLogicException;
-import by.etc.finaltask.logic.validator.UserValidator;
-import by.etc.finaltask.logic.validator.ValidatorFactory;
+import by.etc.finaltask.logic.validation.UserValidatorImpl;
+import by.etc.finaltask.logic.validation.ValidatorFactory;
 
 import java.util.List;
 
 public class UserLogicImpl implements UserLogic {
 
     public boolean isValidUser(String email, String password) throws UserLogicException, InvalidInputException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidEmail(email) || !validator.isValidPassword(password)) {
             throw new InvalidInputException("Wrong email or password");
@@ -33,7 +33,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     public User getUserInformation(String email) throws UserLogicException, InvalidInputException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidEmail(email)) {
             throw new InvalidInputException("Wrong email");
@@ -51,7 +51,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void addNewUser(String email, String firstName, String lastName, String sex, String role, String password) throws UserLogicException, InvalidInputException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidUserInfo(email, firstName, lastName, sex, role) || !validator.isValidPassword(password)) {
             throw new InvalidInputException("Wrong params in new user.");
@@ -73,7 +73,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public User takeUser(String userId) throws UserLogicException, InvalidInputException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidId(userId)) {
             throw new InvalidInputException("Wrong user id." + userId);
@@ -91,7 +91,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void remove(String userId, String role) throws InvalidInputException, UserLogicException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidId(userId) || !validator.isValidRole(role)) {
             throw new InvalidInputException("Wrong user id or role.");
@@ -111,7 +111,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void editProfile(String userId, String email, String firstName, String lastName, String sex) throws InvalidInputException, UserLogicException {
-        UserValidator userValidator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl userValidator = ValidatorFactory.getInstance().getUserValidator();
         if(!userValidator.isValidEditUser(userId, email, firstName, lastName, sex)) {
             throw new InvalidInputException("Wrong input parameters!");
         }
@@ -127,7 +127,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void restoreUser(String userId) throws InvalidInputException, UserLogicException {
-        UserValidator validator = ValidatorFactory.getInstance().getUserValidator();
+        UserValidatorImpl validator = ValidatorFactory.getInstance().getUserValidator();
 
         if (!validator.isValidId(userId)) {
             throw new InvalidInputException("Wrong user id.");

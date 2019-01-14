@@ -1,6 +1,5 @@
 package by.etc.finaltask.controller.command.common;
 
-import by.etc.finaltask.bean.Role;
 import by.etc.finaltask.bean.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
@@ -25,9 +24,9 @@ public class RemoveUser implements Command {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(USER);
         String id = String.valueOf(user.getId());
-        Role role = user.getRole();
+        User.Role role = user.getRole();
         String userRole;
-        if (role.equals(Role.ADMIN)) {
+        if (role.equals(User.Role.ADMIN)) {
             id = request.getParameter(USER_ID);
             userRole = request.getParameter(USER_ROLE);
         } else {
@@ -36,7 +35,7 @@ public class RemoveUser implements Command {
         UserLogic userLogic = LogicFactory.getInstance().getUserLogic();
         try {
             userLogic.remove(id, userRole);
-            if (role.equals(Role.ADMIN)) {
+            if (role.equals(User.Role.ADMIN)) {
                 CommandDirector.getInstance().getCommand(CommandType.SHOW_ALL_USERS.toString()).execute(request, response);
             } else {
                 CommandDirector.getInstance().getCommand(CommandType.LOGOUT.toString()).execute(request, response);
