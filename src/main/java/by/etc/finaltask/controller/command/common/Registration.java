@@ -26,6 +26,7 @@ public class Registration implements Command {
     private static final String LAST_NAME = "lastName";
     private static final String SEX = "sex";
     private static final String ROLE = "role";
+    private static final String USER = "user";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,12 +43,15 @@ public class Registration implements Command {
 
         try {
             userLogic.addNewUser(email, firstName, lastName, sex, role, password);
+            User user = userLogic.getUserInformation(email);
+            session.setAttribute(USER, user);
         } catch (UserLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (InvalidInputException e) {
             session.setAttribute("error", true);
             response.sendRedirect(JspPagePath.REGISTRATION);
         }
+
         Command command = CommandDirector.getInstance().getCommand(CommandType.SHOW_HOME_PAGE.toString());
         command.execute(request, response);
 

@@ -2,23 +2,81 @@ package by.etc.finaltask.bean;
 
 import java.io.Serializable;
 
+/**
+ * Entity class for Courses database table.
+ */
 public class Course implements Serializable {
+
+    /**
+     * Serialization UID.
+     */
     private static final long serialVersionUID = 4857546578432834325L;
 
+    /**
+     * The course's id.
+     */
     private int id;
-    private String name;
-    private String description;
-    private String dateStart;
-    private String dateFinish;
-    private int userId;
-    private String isDeleted;
 
-    private String progress;
+    /**
+     * The course's name.
+     */
+    private String name;
+
+    /**
+     * The course's description.
+     */
+    private String description;
+
+    /**
+     * The course's start date.
+     */
+    private String dateStart;
+
+    /**
+     * The course's finish date.
+     */
+    private String dateFinish;
+
+    /**
+     * The id of user who made the course.
+     */
+    private int userId;
+
+    /**
+     * Is course deleted value.
+     */
+    private boolean isDeleted;
+
+    /**
+     * The {@link Progress}.
+     */
+    private Progress progress;
+
+    /**
+     * Defines possible course's progress.
+     */
+    public enum Progress {
+
+        /**
+         * The planned progress.
+         */
+        PLANNED,
+
+        /**
+         * Thr continues progress.
+         */
+        CONTINUES,
+
+        /**
+         * The finished progress.
+         */
+        FINISHED
+    }
 
     public Course() {
     }
 
-    public Course(int id, String name, String description, String dateStart, String dateFinish, int userId, String progress) {
+    public Course(int id, String name, String description, String dateStart, String dateFinish, int userId, Progress progress) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -76,19 +134,19 @@ public class Course implements Serializable {
         this.userId = userId;
     }
 
-    public String getProgress() {
+    public Progress getProgress() {
         return progress;
     }
 
-    public void setProgress(String progress) {
+    public void setProgress(Progress progress) {
         this.progress = progress;
     }
 
-    public String getIsDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(String isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
@@ -102,29 +160,31 @@ public class Course implements Serializable {
         result = prime * result + dateStart.hashCode();
         result = prime * result + dateFinish.hashCode();
         result = prime * result + userId;
+        result = prime * result + progress.hashCode();
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this) {
+        if (obj == this) {
             return true;
         }
-        if(obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
         Course course = (Course) obj;
-        return course.getId() == id &&
+        return course.getId() == id && course.isDeleted() == isDeleted &&
                 course.getName() != null && course.getName().equals(name) &&
                 course.getDescription() != null && course.getDescription().equals(description) &&
                 course.getDateStart() != null && course.getDateStart().equals(dateStart) &&
                 course.getDateFinish() != null && course.getDateFinish().equals(dateFinish) &&
-                course.getUserId() != 0 && course.getUserId() == userId;
+                course.getUserId() != 0 && course.getUserId() == userId &&
+                course.getProgress() != null && course.getProgress() == progress;
     }
 
     @Override
     public String toString() {
-        return String.format("Entity %s [id %d, name %s, description %s, start date %s, date finish %s, userId %d]",
-                getClass().getSimpleName(), id, name, description, dateStart, dateFinish, userId);
+        return String.format("Entity %s [id %d, name %s, description %s, start date %s, date finish %s, userId %d, isDeleted %s, progress %s]",
+                getClass().getSimpleName(), id, name, description, dateStart, dateFinish, userId, isDeleted, progress);
     }
 }

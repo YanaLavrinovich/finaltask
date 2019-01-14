@@ -1,35 +1,104 @@
 package by.etc.finaltask.bean.build_bean;
 
-import by.etc.finaltask.bean.Role;
-import by.etc.finaltask.bean.Sex;
 import by.etc.finaltask.bean.User;
+import by.etc.finaltask.logic.validator.UserValidator;
 
-public class UserBuilder {
+import java.io.Serializable;
 
-    public User build(String email, String firstName, String lastName, Sex sex, Role role){
-        User newUser = new User();
-        newUser.setEmail(email);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setSex(sex);
-        newUser.setRole(role);
-        return newUser;
+/**
+ * Build user. Parameters are validated with {@link UserValidator}.
+ */
+public class UserBuilder implements Serializable {
+    private static final long serialVersionUID = 2299823445903644174L;
+
+    private int id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private User.Sex sex;
+    private User.Role role;
+    private boolean isDeleted;
+
+    public UserBuilder() {
+        sex = User.Sex.MALE;
+        role = User.Role.STUDENT;
     }
 
-    public User build(int id, String email, String firstName, String lastName){
+    /**
+     * Adds id to {@link User}.
+     *
+     * @param id user id
+     */
+    public void addId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Adds email to {@link User}.
+     *
+     * @param email user email
+     */
+    public void addEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Adds first name to {@link User}.
+     *
+     * @param firstName user first name
+     */
+    public void addFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Adds last name to {@link User}.
+     *
+     * @param lastName user last name
+     */
+    public void addLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * Adds sex to {@link User}.
+     *
+     * @param sex user sex
+     */
+    public void addSex(String sex) {
+        this.sex = User.Sex.valueOf(sex.toUpperCase());
+    }
+
+    /**
+     * Adds role to {@link User}.
+     *
+     * @param role user role
+     */
+    public void addRole(String role) {
+        this.role = User.Role.valueOf(role.toUpperCase());
+    }
+
+    /**
+     * Adds is deleted to {@link User}.
+     *
+     * @param isDeleted user is deleted
+     */
+    public void addIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
+     * Builds {@link User}.
+     *
+     * @return new user
+     */
+    public User build() {
         User newUser = new User();
         newUser.setId(id);
         newUser.setEmail(email);
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
-        return newUser;
-    }
-
-    public User build(int userId, String firstName, String lastName, Role role, String isDeleted) {
-        User newUser = new User();
-        newUser.setId(userId);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
+        newUser.setSex(sex);
         newUser.setRole(role);
         newUser.setIsDeleted(isDeleted);
         return newUser;
