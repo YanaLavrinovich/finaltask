@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -39,64 +39,68 @@
         <div class="col-md-12">
             <jsp:useBean id="requestMap" scope="request" class="java.util.HashMap"/>
             <c:forEach items="${requestMap}" var="requestEntry">
-                <div class="accordion" id="${requestEntry.key.id}">
-                    <div class="card">
-                        <div class="card-header" id="heading${requestEntry.key.id}">
-                            <h5 class="mb-0 justify-content-between">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                        data-target="#collapse${requestEntry.key.id}"
-                                        aria-expanded="true" aria-controls="collapse${requestEntry.key.id}">
-                                    <c:out value="${requestEntry.key.name} "/>
-                                    <c:if test="${requestEntry.value.size() ne '0'}">
+                <c:if test="${requestEntry.value.size() ne '0'}">
+                    <div class="accordion" id="${requestEntry.key.id}">
+                        <div class="card">
+                            <div class="card-header" id="heading${requestEntry.key.id}">
+                                <h5 class="mb-0 justify-content-between">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapse${requestEntry.key.id}"
+                                            aria-expanded="true" aria-controls="collapse${requestEntry.key.id}">
+                                        <c:out value="${requestEntry.key.name} "/>
+                                        <c:if test="${requestEntry.value.size() ne '0'}">
                                     <span class="badge badge-info badge-pill"><c:out
                                             value="${requestEntry.value.size()}"/>
                                     </span>
-                                    </c:if>
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapse${requestEntry.key.id}" class="collapse"
-                             area-labelledby="heading${requestEntry.key.id}">
-                            <div class="card-body">
-                                <table class="table table-hover">
-                                    <tbody>
-                                    <c:forEach items="${requestEntry.value}" var="requestEntity"
-                                               varStatus="requestLoop">
-                                        <tr>
-                                            <th scope="row"><c:out value="${requestLoop.count}"/></th>
-                                            <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${requestEntity.id}'">
-                                                <c:out
-                                                        value="${requestEntity.firstName} ${requestEntity.lastName}"/></td>
-                                            <td class="text-right">
-                                                <div class="btn-group">
-                                                    <form action="controller" method="post">
-                                                        <input type="hidden" name="command" value="ACCEPT_SUBSCRIBER">
-                                                        <input type="hidden" name="studentId"
-                                                               value="${requestEntity.id}">
-                                                        <input type="hidden" name="courseId"
-                                                               value="${requestEntry.key.id}">
-                                                        <button class="btn btn-sm btn-info"><c:out
-                                                                value="${accept}"/></button>
-                                                    </form>
-                                                    <form action="controller" method="post">
-                                                        <input type="hidden" name="command" value="REJECT_SUBSCRIBER">
-                                                        <input type="hidden" name="studentId"
-                                                               value="${requestEntity.id}">
-                                                        <input type="hidden" name="courseId"
-                                                               value="${requestEntry.key.id}">
-                                                        <button class="btn btn-sm btn-danger">
-                                                            <c:out value="${reject}"/></button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </c:if>
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapse${requestEntry.key.id}" class="collapse"
+                                 area-labelledby="heading${requestEntry.key.id}">
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <c:forEach items="${requestEntry.value}" var="requestEntity"
+                                                   varStatus="requestLoop">
+                                            <tr>
+                                                <th scope="row"><c:out value="${requestLoop.count}"/></th>
+                                                <td onclick="location.href='controller?command=SHOW_PROFILE&userId=${requestEntity.id}'">
+                                                    <c:out
+                                                            value="${requestEntity.firstName} ${requestEntity.lastName}"/></td>
+                                                <td class="text-right">
+                                                    <div class="btn-group">
+                                                        <form action="controller" method="post">
+                                                            <input type="hidden" name="command"
+                                                                   value="ACCEPT_SUBSCRIBER">
+                                                            <input type="hidden" name="studentId"
+                                                                   value="${requestEntity.id}">
+                                                            <input type="hidden" name="courseId"
+                                                                   value="${requestEntry.key.id}">
+                                                            <button class="btn btn-sm btn-info"><c:out
+                                                                    value="${accept}"/></button>
+                                                        </form>
+                                                        <form action="controller" method="post">
+                                                            <input type="hidden" name="command"
+                                                                   value="REJECT_SUBSCRIBER">
+                                                            <input type="hidden" name="studentId"
+                                                                   value="${requestEntity.id}">
+                                                            <input type="hidden" name="courseId"
+                                                                   value="${requestEntry.key.id}">
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <c:out value="${reject}"/></button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </c:if>
             </c:forEach>
         </div>
     </div>

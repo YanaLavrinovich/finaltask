@@ -1,7 +1,7 @@
 package by.etc.finaltask.logic.user;
 
-import by.etc.finaltask.bean.User;
-import by.etc.finaltask.bean.build_bean.UserBuilder;
+import by.etc.finaltask.domain.User;
+import by.etc.finaltask.domain.builddomain.UserBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;

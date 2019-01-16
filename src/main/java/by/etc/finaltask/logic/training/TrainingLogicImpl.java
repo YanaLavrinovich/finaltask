@@ -1,8 +1,8 @@
 package by.etc.finaltask.logic.training;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.Training;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
@@ -134,6 +134,7 @@ public class TrainingLogicImpl implements TrainingLogic {
             courseValidator.isValidCourseId(courseId);
             courseValidator.isValidUserId(studentId);
             trainingValidator.isValidMark(mark);
+            trainingValidator.isValidComment(comment);
         } catch (ValidationException e) {
             throw new InvalidInputException("Wrong params in input date", e);
         }

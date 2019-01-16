@@ -1,7 +1,7 @@
 package by.etc.finaltask.dao.course;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.build_bean.CourseBuilder;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.builddomain.CourseBuilder;
 import by.etc.finaltask.dao.connector.ConnectionException;
 import by.etc.finaltask.dao.connector.ConnectionPool;
 import by.etc.finaltask.dao.exception.DaoException;
@@ -22,7 +22,7 @@ public class SQLCourseDao implements CourseDao {
     private static final String REMOVE_COURSE = "UPDATE courses" +
             " SET isDeleted = 'true' WHERE id = ?";
     private static final String REJECT_STUDENTS_OF_COURSE = "UPDATE training SET" +
-            " course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'reject')" +
+            " course_status_id = (SELECT id FROM course_status WHERE course_status.name = 'rejected')" +
             " WHERE courses_id = ?";
     private static final String EDIT_COURSE = "UPDATE courses SET name = ?, description = ?, dateStart = ?, dateFinish = ?" +
             " WHERE id = ?";

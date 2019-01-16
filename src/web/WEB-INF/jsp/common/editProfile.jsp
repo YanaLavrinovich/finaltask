@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -28,7 +28,7 @@
 
 </head>
 <body>
-<jsp:useBean id="user" scope="request" type="by.etc.finaltask.bean.User"/>
+<jsp:useBean id="user" scope="request" type="by.etc.finaltask.domain.User"/>
 <c:if test="${sessionScope.user.role eq 'TEACHER'}">
     <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
     <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
@@ -59,7 +59,8 @@
             <div class="row">
                 <div class="form-group mb-3 col-md-6 col-sm-12">
                     <label for="firstName"><c:out value="${firstName}"/></label>
-                    <input type="text" name="firstName" class="form-control" id="firstName" placeholder=""
+                    <input type="text" name="firstName" class="form-control" id="firstName"
+                           pattern="[a-zA-Z][a-zA-Z '-]*" maxlength="64" placeholder=""
                            value="${user.firstName}"
                            required="">
                     <div class="invalid-feedback">
@@ -68,7 +69,8 @@
                 </div>
                 <div class="mb- col-md-6 col-sm-123">
                     <label for="lastName"><c:out value="${lastName}"/></label>
-                    <input type="text" name="lastName" class="form-control" id="lastName" placeholder=""
+                    <input type="text" name="lastName" class="form-control" id="lastName"
+                           pattern="[a-zA-Z][a-zA-Z '-]*" maxlength="64" placeholder=""
                            value="${user.lastName}"
                            required="">
                     <div class="invalid-feedback">
@@ -80,7 +82,7 @@
             <div class="row">
                 <div class="mb-3 col-md-6 col-sm-12">
                     <label for="email"><c:out value="${email}"/></label>
-                    <input type="text" name="email" class="form-control" id="email" placeholder="" value="${user.email}">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="" value="${user.email}">
                     <div class="invalid-feedback">
                         ${errorEmail}
                     </div>
@@ -89,8 +91,8 @@
                     <label for="sex">${sex}</label>
                     <select name="sex" class="custom-select d-block w-100" id="sex" required="">
                         <option value="">${choose}</option>
-                        <option value="female">${female}</option>
-                        <option value="male">${male}</option>
+                        <option ${user.sex.stringValue eq 'female' ? 'selected' : '' } value="female">${female}</option>
+                        <option ${user.sex.stringValue eq 'male' ? 'selected' : '' } value="male">${male}</option>
                     </select>
                     <div class="invalid-feedback">
                         ${errorSex}

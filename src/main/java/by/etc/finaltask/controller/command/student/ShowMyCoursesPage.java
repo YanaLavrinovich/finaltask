@@ -1,7 +1,7 @@
 package by.etc.finaltask.controller.command.student;
 
-import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.Training;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.JspPagePath;
 import by.etc.finaltask.logic.LogicFactory;

@@ -75,4 +75,5 @@ public interface TrainingValidator {
      */
     void isValidMark(String mark) throws ValidationException;
 
+    void isValidComment(String comment) throws ValidationException;
 }

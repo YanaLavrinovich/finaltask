@@ -37,7 +37,7 @@ public class CreateCourse implements Command {
             command.execute(request, response);
         } catch (InvalidInputException e) {
             session.setAttribute(ERROR, true);
-            response.sendRedirect(request.getRequestURI());
+            CommandDirector.getInstance().getCommand(CommandType.COURSE_CREATION_PAGE.toString()).execute(request, response);
         } catch (CourseLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

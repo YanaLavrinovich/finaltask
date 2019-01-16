@@ -3,9 +3,10 @@ package by.etc.finaltask.logic.validation;
 import java.sql.Date;
 
 public class CourseValidatorImpl implements CourseValidator {
-    private static final String NAME_REGEX = "^[\\w\\s'[А-я]]+$";
+    private static final String NAME_REGEX = "^[\\w\\s' -]+$";
     private static final String DATE_REGEX = "^[1-9][\\d]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
     private static final String NUMBER_REGEX = "^[\\d]+$";
+    private static final String TEXT_REGEX = "[a-zA-Z][a-zA-Z '-.,]*";
 
     /**
      * @see CourseValidator#isValidCourse(String, String, String, String)
@@ -15,6 +16,7 @@ public class CourseValidatorImpl implements CourseValidator {
         isValidDate(dateStart);
         isValidDate(dateFinish);
         isValidUserId(userId);
+        isValidDateRange(dateStart, dateFinish);
     }
 
     /**
@@ -71,6 +73,13 @@ public class CourseValidatorImpl implements CourseValidator {
         Date finish = Date.valueOf(dateFinish);
         if (start.after(finish)) {
             throw new ValidationException("The course's range of date is wrong.");
+        }
+    }
+
+    @Override
+    public void isValidDescription(String description) throws ValidationException {
+        if (description == null || !description.matches(TEXT_REGEX)) {
+            throw new ValidationException("The course's description is wrong. It is null or has incorrect data");
         }
     }
 }

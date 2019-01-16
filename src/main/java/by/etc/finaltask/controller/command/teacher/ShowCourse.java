@@ -1,8 +1,8 @@
 package by.etc.finaltask.controller.command.teacher;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.Training;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Statement;
 import java.util.List;
 
 public class ShowCourse implements Command {

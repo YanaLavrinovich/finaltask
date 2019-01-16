@@ -104,8 +104,8 @@ body {
     width: 20px;
 }
 
-.courses tr {
-    cursor: pointer
+tr {
+    cursor: pointer;
 }
 
 .btns-group form {

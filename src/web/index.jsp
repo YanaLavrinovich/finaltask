@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -18,6 +18,7 @@
     <fmt:message bundle="${loc}" key="locale.message.sign.in" var="messageSignIn"/>
     <fmt:message bundle="${loc}" key="locale.language.english.short" var="langEn"/>
     <fmt:message bundle="${loc}" key="locale.language.russian.short" var="langRu"/>
+    <fmt:message bundle="${loc}" key="locale.error.input" var="errorInput"/>
 
 </head>
 <body class="text-center">
@@ -34,7 +35,7 @@
         <img class="mb-4" src="./assets/images/logo.png"/>
         <h1 class="h3 mb-3 font-weight-normal">${messageSignIn}</h1>
         <c:if test="${sessionScope.error==true}">
-            <p style="color: crimson">Wrong email or password!</p>
+            <p style="color: crimson"><c:out value="${errorInput}"/></p>
         </c:if>
         <label for="inputLogin" class="sr-only">${email}</label>
         <input name="email" type="email" id="inputLogin" class="form-control" placeholder=${email}>

@@ -1,5 +1,6 @@
 package by.etc.finaltask.controller.command.common;
 
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
@@ -10,6 +11,7 @@ import by.etc.finaltask.logic.user.UserLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class EditProfile implements Command {
@@ -18,6 +20,7 @@ public class EditProfile implements Command {
     private static final String FIRST_NAME = "firstName";
     private static final String LAST_NAME = "lastName";
     private static final String SEX = "sex";
+    private static final String USER = "user";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,8 +34,15 @@ public class EditProfile implements Command {
 
         try {
             userLogic.editProfile(userId, email, firstName, lastName, sex);
+            HttpSession session = request.getSession(true);
+            User sessionUser = (User)session.getAttribute(USER);
+            if(sessionUser.getId() == Integer.valueOf(userId)) {
+                User user = userLogic.getUserInformation(email);
+                session.setAttribute(USER, user);
+            }
         } catch (UserLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
         } catch (InvalidInputException e) {
             CommandDirector.getInstance().getCommand(CommandType.SHOW_EDIT_PROFILE_PAGE.toString()).execute(request, response);
         }

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -6,7 +6,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -14,10 +14,12 @@
     <fmt:message bundle="${loc}" key="locale.message.mark" var="mark"/>
     <fmt:message bundle="${loc}" key="locale.message.comment" var="comment"/>
     <fmt:message bundle="${loc}" key="locale.button.save" var="save"/>
+    <fmt:message bundle="${loc}" key="locale.error.input" var="errorInput"/>
+
 </head>
 <body>
-<jsp:useBean id="course" scope="request" type="by.etc.finaltask.bean.Course"/>
-<jsp:useBean id="student" scope="request" type="by.etc.finaltask.bean.User"/>
+<jsp:useBean id="course" scope="request" type="by.etc.finaltask.domain.Course"/>
+<jsp:useBean id="student" scope="request" type="by.etc.finaltask.domain.User"/>
 <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
 
 <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">
@@ -31,6 +33,11 @@
             <h1><c:out value="${student.firstName} ${student.lastName}"/></h1>
             <h3><c:out value="${course.name}"/></h3>
         </div>
+    </div>
+    <div class="row">
+        <c:if test="${sessionScope.error==true}">
+            <p style="color: crimson"><c:out value="${errorInput}"/></p>
+        </c:if>
     </div>
     <form method="post" action="controller">
         <div class="form-group">

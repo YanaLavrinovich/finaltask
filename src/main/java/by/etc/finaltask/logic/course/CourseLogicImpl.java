@@ -1,7 +1,7 @@
 package by.etc.finaltask.logic.course;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.build_bean.CourseBuilder;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.builddomain.CourseBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.course.CourseDao;
 import by.etc.finaltask.dao.exception.DaoException;
@@ -9,7 +9,6 @@ import by.etc.finaltask.dao.exception.DaoRollbackException;
 import by.etc.finaltask.logic.exception.CourseLogicException;
 import by.etc.finaltask.logic.exception.InvalidInputException;
 import by.etc.finaltask.logic.validation.CourseValidator;
-import by.etc.finaltask.logic.validation.CourseValidatorImpl;
 import by.etc.finaltask.logic.validation.ValidationException;
 import by.etc.finaltask.logic.validation.ValidatorFactory;
 
@@ -22,6 +21,7 @@ public class CourseLogicImpl implements CourseLogic {
 
         try {
             courseValidator.isValidCourse(name, dateStart, dateFinish, userId);
+            courseValidator.isValidDescription(description);
         } catch (ValidationException e) {
             throw new InvalidInputException("Wrong params in input date", e);
         }
@@ -114,6 +114,7 @@ public class CourseLogicImpl implements CourseLogic {
             courseValidator.isValidCourseId(courseId);
             courseValidator.isValidCourse(nameCourse, dateStart, dateFinish);
             courseValidator.isValidDateRange(dateStart, dateFinish);
+            courseValidator.isValidDescription(description);
         } catch (ValidationException e) {
             throw new InvalidInputException("Wrong params in input date", e);
         }

@@ -67,4 +67,5 @@ public interface CourseValidator {
      */
     void isValidDateRange(String dateStart, String dateFinish) throws ValidationException;
 
+    void isValidDescription(String description) throws ValidationException;
 }

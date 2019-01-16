@@ -1,6 +1,6 @@
 package by.etc.finaltask.controller.command.student;
 
-import by.etc.finaltask.bean.Course;
+import by.etc.finaltask.domain.Course;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.logic.LogicFactory;
 import by.etc.finaltask.logic.course.CourseLogic;

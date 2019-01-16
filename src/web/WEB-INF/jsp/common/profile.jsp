@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -19,7 +19,7 @@
 
 </head>
 <body>
-<jsp:useBean id="user" scope="request" type="by.etc.finaltask.bean.User"/>
+<jsp:useBean id="user" scope="request" type="by.etc.finaltask.domain.User"/>
 <c:if test="${sessionScope.user.role eq 'TEACHER'}">
     <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
     <jsp:include page="/WEB-INF/jsp/component/teacherNavBar.jsp">

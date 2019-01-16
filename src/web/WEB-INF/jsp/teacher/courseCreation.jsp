@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -18,6 +18,7 @@
     <fmt:message bundle="${loc}" key="locale.message.course.date.start" var="dateStart"/>
     <fmt:message bundle="${loc}" key="locale.message.course.date.finish" var="dateFinish"/>
     <fmt:message bundle="${loc}" key="locale.button.course.add" var="add"/>
+    <fmt:message bundle="${loc}" key="locale.error.input" var="errorInput"/>
 
 </head>
 <body>
@@ -34,14 +35,21 @@
             <h1><c:out value="${createCourse}"/></h1>
         </div>
     </div>
+    <div class="row">
+        <c:if test="${sessionScope.error==true}">
+            <p style="color: crimson"><c:out value="${errorInput}"/></p>
+        </c:if>
+    </div>
     <form method="post">
         <div class="form-group">
             <label for="courseName"><c:out value="${name}"/></label>
-            <input type="text" name="name" class="form-control" id="courseName" required/>
+            <input type="text" name="name" class="form-control" id="courseName"
+                   pattern="[a-zA-Z][a-zA-Z '-]*" maxlength="64" required/>
         </div>
         <div class="form-group">
             <label for="courseDescription"><c:out value="${description}"/></label>
-            <textarea class="form-control" name="description" id="courseDescription" rows="3" required></textarea>
+            <textarea class="form-control" name="description" id="courseDescription" rows="7"
+                       maxlength="1000" required></textarea>
         </div>
         <div class="row">
             <div class="col-md-6 col-sm-12 form-group">

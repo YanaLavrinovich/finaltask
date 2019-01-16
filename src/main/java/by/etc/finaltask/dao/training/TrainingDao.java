@@ -1,8 +1,8 @@
 package by.etc.finaltask.dao.training;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.Training;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 

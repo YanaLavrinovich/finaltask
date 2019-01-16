@@ -1,6 +1,6 @@
 package by.etc.finaltask.dao.user;
 
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.dao.exception.DaoException;
 import by.etc.finaltask.dao.exception.DaoRollbackException;
 

@@ -1,10 +1,10 @@
 package by.etc.finaltask.dao.training;
 
-import by.etc.finaltask.bean.Course;
-import by.etc.finaltask.bean.Training;
-import by.etc.finaltask.bean.User;
-import by.etc.finaltask.bean.build_bean.TrainingBuilder;
-import by.etc.finaltask.bean.build_bean.UserBuilder;
+import by.etc.finaltask.domain.Course;
+import by.etc.finaltask.domain.Training;
+import by.etc.finaltask.domain.User;
+import by.etc.finaltask.domain.builddomain.TrainingBuilder;
+import by.etc.finaltask.domain.builddomain.UserBuilder;
 import by.etc.finaltask.dao.DaoFactory;
 import by.etc.finaltask.dao.connector.ConnectionException;
 import by.etc.finaltask.dao.connector.ConnectionPool;

@@ -1,7 +1,7 @@
 package by.etc.finaltask.dao.user;
 
-import by.etc.finaltask.bean.User;
-import by.etc.finaltask.bean.build_bean.UserBuilder;
+import by.etc.finaltask.domain.User;
+import by.etc.finaltask.domain.builddomain.UserBuilder;
 import by.etc.finaltask.dao.connector.ConnectionException;
 import by.etc.finaltask.dao.connector.ConnectionPool;
 import by.etc.finaltask.dao.connector.ConnectionPoolException;
@@ -247,7 +247,7 @@ public class SQLUserDao implements UserDao {
             userStatement.setString(1, email);
             userStatement.setString(2, firstName);
             userStatement.setString(3, lastName);
-            userStatement.setString(4, userSex.toString());
+            userStatement.setString(4, userSex.toString().toLowerCase());
             userStatement.setInt(5, userId);
 
             userStatement.execute();

@@ -1,4 +1,4 @@
-package by.etc.finaltask.bean;
+package by.etc.finaltask.domain;
 
 import java.io.Serializable;
 

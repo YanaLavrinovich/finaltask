@@ -1,6 +1,6 @@
 package by.etc.finaltask.controller.filter;
 
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.AccessDirector;
 import by.etc.finaltask.controller.command.CommandType;
 import by.etc.finaltask.controller.exception.AccessIsNotAllowedException;

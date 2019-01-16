@@ -1,6 +1,6 @@
 package by.etc.finaltask.controller.command.common;
 
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;
@@ -44,9 +44,11 @@ public class Registration implements Command {
             session.setAttribute(USER, user);
         } catch (UserLogicException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
         } catch (InvalidInputException e) {
             session.setAttribute("error", true);
             response.sendRedirect(JspPagePath.REGISTRATION);
+            return;
         }
 
         Command command = CommandDirector.getInstance().getCommand(CommandType.SHOW_HOME_PAGE.toString());

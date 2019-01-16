@@ -1,10 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -19,10 +19,12 @@
     <fmt:message bundle="${loc}" key="locale.button.stop.training" var="stopTraining"/>
     <fmt:message bundle="${loc}" key="locale.message.course.date.start" var="dateStart"/>
     <fmt:message bundle="${loc}" key="locale.message.course.date.finish" var="dateFinish"/>
+    <fmt:message bundle="${loc}" key="locale.message.submit" var="submitMessasge"/>
+    <fmt:message bundle="${loc}" key="locale.message.sorry" var="sorryMessage"/>
 
 </head>
 <body>
-<jsp:useBean id="course" scope="request" class="by.etc.finaltask.bean.Course"/>
+<jsp:useBean id="course" scope="request" class="by.etc.finaltask.domain.Course"/>
 
 <c:if test="${sessionScope.user.role eq 'TEACHER'}">
     <jsp:useBean id="countRequest" scope="request" type="java.lang.Integer"/>
@@ -85,10 +87,10 @@
                     </form>
                 </c:if>
                 <c:if test="${courseStatus eq 'REQUESTED'}">
-                    <p style="color: crimson">You submit on this course!</p>
+                    <p style="color: crimson"><c:out value="${submitMessasge}"/></p>
                 </c:if>
                 <c:if test="${courseStatus eq 'REJECTED'}">
-                    <p style="color: crimson">Sorry! You was be rejected.</p>
+                    <p style="color: crimson"><c:out value="${sorryMessage}"/></p>
                 </c:if>
             </c:if>
         </div>

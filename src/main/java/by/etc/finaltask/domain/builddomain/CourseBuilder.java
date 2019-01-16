@@ -1,6 +1,6 @@
-package by.etc.finaltask.bean.build_bean;
+package by.etc.finaltask.domain.builddomain;
 
-import by.etc.finaltask.bean.Course;
+import by.etc.finaltask.domain.Course;
 import by.etc.finaltask.logic.validation.CourseValidatorImpl;
 
 import java.io.Serializable;

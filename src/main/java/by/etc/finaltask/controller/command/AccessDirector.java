@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static by.etc.finaltask.bean.User.Role;
+import static by.etc.finaltask.domain.User.Role;
 
 public class AccessDirector {
     private Map<CommandType, List<Role>> accessMap = new HashMap<>();
@@ -88,7 +88,7 @@ public class AccessDirector {
     }
 
     public void checkAccess(CommandType command, Role role) throws AccessIsNotAllowedException {
-        if (command == CommandType.AUTHORIZATION || command == CommandType.REGISTRATION) {
+        if (command == CommandType.AUTHORIZATION || command == CommandType.REGISTRATION || command == CommandType.CHANGE_LANGUAGE) {
             return;
         }
         if (role != null) {

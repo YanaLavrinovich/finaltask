@@ -1,10 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <link href="./assets/css/styles.css" rel="stylesheet">
 
     <fmt:setLocale value="${sessionScope.language}"/>
     <fmt:setBundle basename="locale.locale" var="loc"/>
@@ -30,6 +31,7 @@
     <fmt:message bundle="${loc}" key="locale.error.message.email" var="errorEmail"/>
     <fmt:message bundle="${loc}" key="locale.language.english.short" var="langEn"/>
     <fmt:message bundle="${loc}" key="locale.language.russian.short" var="langRu"/>
+    <fmt:message bundle="${loc}" key="locale.error.input" var="errorInput"/>
 
 </head>
 <body>
@@ -50,11 +52,19 @@
                 <h1 class="h3 mb-3 font-weight-normal">${registration}</h1>
             </div>
         </div>
+        <c:if test="${sessionScope.error==true}">
+            <div class="row">
+                <div class="col-md-12 text-center">
+            <p style="color: crimson"><c:out value="${errorInput}"/></p>
+                </div>
+            </div>
+        </c:if>
         <div>
             <div class="row">
                 <div class="form-group mb-3 col-md-6 col-sm-12">
                     <label for="firstName">${firstName}</label>
-                    <input type="text" name="firstName" class="form-control" id="firstName" placeholder="" value=""
+                    <input type="text" name="firstName" class="form-control" id="firstName"
+                           pattern="[a-zA-Z][a-zA-Z '-]*" maxlength="64" placeholder="" value=""
                            required="">
                     <div class="invalid-feedback">
                         ${errorFirstName}
@@ -62,7 +72,8 @@
                 </div>
                 <div class="mb- col-md-6 col-sm-123">
                     <label for="lastName">${lastName}</label>
-                    <input type="text" name="lastName" class="form-control" id="lastName" placeholder="" value=""
+                    <input type="text" name="lastName" class="form-control" id="lastName"
+                           pattern="[a-zA-Z][a-zA-Z '-]*" maxlength="64" placeholder="" value=""
                            required="">
                     <div class="invalid-feedback">
                         ${errorLastName}
@@ -73,7 +84,7 @@
             <div class="row">
                 <div class="mb-3 col-md-6 col-sm-12">
                     <label for="email">${email}</label>
-                    <input type="text" name="email" class="form-control" id="email" placeholder="">
+                    <input type="email" name="email" maxlength="64" class="form-control" id="email" placeholder="">
                     <div class="invalid-feedback">
                         ${errorEmail}
                     </div>
@@ -115,7 +126,7 @@
                 <div class="col-md-12 text-right">
                     <input type="hidden" name="command" value="REGISTRATION">
                     <button name="register" formaction="controller" class="btn btn-lg btn-info btn-block"
-                            type="submit">${register}!
+                            type="submit">${register}
                     </button>
                 </div>
             </div>

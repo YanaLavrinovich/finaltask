@@ -1,6 +1,6 @@
 package by.etc.finaltask.controller.command.common;
 
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.controller.command.Command;
 import by.etc.finaltask.controller.command.CommandDirector;
 import by.etc.finaltask.controller.command.CommandType;

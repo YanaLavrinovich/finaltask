@@ -1,6 +1,6 @@
-package by.etc.finaltask.bean.build_bean;
+package by.etc.finaltask.domain.builddomain;
 
-import by.etc.finaltask.bean.User;
+import by.etc.finaltask.domain.User;
 import by.etc.finaltask.logic.validation.UserValidatorImpl;
 
 import java.io.Serializable;

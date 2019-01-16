@@ -3,11 +3,12 @@ package by.etc.finaltask.logic.validation;
 import java.sql.Date;
 
 public class TrainingValidatorImpl implements TrainingValidator {
-    private static final String NAME_REGEX = "^[\\w\\s'[А-я]]+$";
+    private static final String NAME_REGEX = "^[\\w\\s' -]+$";
     private static final String DATE_REGEX = "^[1-9][\\d]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
     private static final String NUMBER_REGEX = "^[\\d]+$";
     private static final String MARK_REGEX = "^(\\d|10)$";
     private static final String STATUS_REGEX = "^(approved|completed|excluded|in process|leaved|rejected|requested)$";
+    private static final String TEXT_REGEX = "[a-zA-Z][a-zA-Z '-.,]*";
 
     /**
      * @see TrainingValidator#isValidCourseInfo(String, String, String, String)
@@ -81,6 +82,13 @@ public class TrainingValidatorImpl implements TrainingValidator {
     public void isValidMark(String mark) throws ValidationException {
         if(mark == null || !mark.matches(MARK_REGEX)) {
             throw new ValidationException("The training's mark is wrong. It is null or has incorrect data");
+        }
+    }
+
+    @Override
+    public void isValidComment(String comment) throws ValidationException {
+        if(comment == null || !comment.matches(TEXT_REGEX)) {
+            throw new ValidationException("The training's comment is wrong. It is null or has incorrect data");
         }
     }
 
